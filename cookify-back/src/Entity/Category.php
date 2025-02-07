@@ -16,6 +16,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("getAllRecipes", "getRecipesByCategorie")]
     private ?string $name = null;
 
     /**

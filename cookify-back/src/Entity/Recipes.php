@@ -6,6 +6,7 @@ use App\Repository\RecipesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipesRepository::class)]
@@ -17,30 +18,39 @@ class Recipes
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("getRecipes", "getAllRecipes", "getRecipesByCategorie")]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups("getAllRecipes")]
     private ?int $cookingTime = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups("getRecipes", "getAllRecipes")]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups("getAllRecipes")]
     private ?int $calories = null;
 
     #[ORM\Column]
+    #[Groups("getAllRecipes")]
     private ?int $quantity = null;
 
     #[ORM\Column]
+    #[Groups("getAllRecipes")]
     private ?int $preparationTime = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups("getAllRecipes")]
     private ?string $instructions = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("getAllRecipes")]
     private ?string $difficulty = null;
 
     #[ORM\Column]
+    #[Groups("getAllRecipes")]
     private ?bool $isPublic = null;
 
     /**
@@ -53,13 +63,19 @@ class Recipes
      * @var Collection<int, Notice>
      */
     #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'recipes')]
+    #[Groups("getAllRecipes")]
     private Collection $notices;
 
     /**
      * @var Collection<int, QuantityFood>
      */
     #[ORM\OneToMany(targetEntity: QuantityFood::class, mappedBy: 'recipeId', orphanRemoval: true)]
+    #[Groups("getAllRecipes")]
     private Collection $ingredients;
+
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[Groups("getAllRecipes")]
+    private ?User $createdBy = null;
 
     public function __construct()
     {
@@ -264,6 +280,18 @@ class Recipes
                 $ingredient->setRecipeId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }

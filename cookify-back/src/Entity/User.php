@@ -49,9 +49,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Preferences::class)]
     private Collection $preferences;
 
+    /**
+     * @var Collection<int, Recipes>
+     */
+    #[ORM\OneToMany(targetEntity: Recipes::class, mappedBy: 'createdBy')]
+    private Collection $recipes;
+
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
+        $this->recipes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -185,6 +192,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removePreference(Preferences $preference): static
     {
         $this->preferences->removeElement($preference);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recipes>
+     */
+    public function getRecipes(): Collection
+    {
+        return $this->recipes;
+    }
+
+    public function addRecipe(Recipes $recipe): static
+    {
+        if (!$this->recipes->contains($recipe)) {
+            $this->recipes->add($recipe);
+            $recipe->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipe(Recipes $recipe): static
+    {
+        if ($this->recipes->removeElement($recipe)) {
+            // set the owning side to null (unless already changed)
+            if ($recipe->getCreatedBy() === $this) {
+                $recipe->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }
