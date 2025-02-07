@@ -5,10 +5,17 @@
       <div *ngIf="recipes.length > 0; else noRecipes" class="content">
         <mat-card *ngFor="let recipe of recipes" appearance="outlined">
           <mat-card-header>
-          <!--image de la recette-->
+            <img mat-card-image src="assets/{{recipe.Image.url}}" alt="" (click)="openDialog(recipe)">
+            <!--ajouter un onClick qui renvois vers le detail de la recette (ou un modal)-->
           </mat-card-header>
+          <mat-card-content>
+            {{recipe.Name}}
+          </mat-card-content>
           <mat-card-actions>
-
+            <button mat-icon-button color="warn" aria-label="Add">
+              <!--ajouter un oonClick-->
+              <mat-icon>add</mat-icon>
+            </button>
           </mat-card-actions>
         </mat-card>
       </div>

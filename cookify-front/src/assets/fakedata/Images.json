@@ -1,10 +1,33 @@
-{
-  "images": [
-    { "id": 1, "recipeId": 101, "url": "https://example.com/tarte.jpg" },
-    { "id": 2, "recipeId": 102, "url": "https://example.com/lasagnes.jpg" },
-    { "id": 3, "recipeId": 103, "url": "https://example.com/smoothie.jpg" },
-    { "id": 4, "recipeId": 104, "url": "https://example.com/soupe.jpg" },
-    { "id": 5, "recipeId": 105, "url": "https://example.com/salade.jpg" },
-    { "id": 6, "recipeId": 106, "url": "https://example.com/pancakes.jpg" }
-  ]
-}
+[
+  {
+    "id": 1,
+    "recipeId": 1,
+    "url": "image1.jpg"
+  },
+  {
+    "id": 2,
+    "recipeId": 2,
+    "url": "image2.jpg"
+  },
+  {
+    "id": 3,
+    "recipeId": 3,
+    "url": "image3.jpg"
+  },
+  {
+    "id": 4,
+    "recipeId": 4,
+    "url": "image4.jpg"
+  },
+  {
+    "id": 5,
+    "recipeId": 5,
+    "url": "image5.jpg"
+  },
+  {
+    "id": 6,
+    "recipeId": 6,
+    "url": "image6.jpg"
+  }
+]
+

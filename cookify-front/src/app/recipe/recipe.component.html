@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="actions">
+    <mat-dialog-actions>
+      <button mat-icon-button color="warn" mat-dialog-close aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-dialog-actions>
+  </div>
+
+  <img mat-dialog-title src="assets/{{data.recipe.Image.url}}" alt="">
+  <mat-dialog-content>
+    <h2 mat-dialog-title>{{data.recipe.Name}}</h2>
+    {{data.recipe.Description}}
+
+    Temps de cuisson : {{data.recipe.CookingTime}}
+    Calories : {{data.recipe.Calories}}
+    Quantité : {{data.recipe.Quantity}}
+    Temps de préparation : {{data.recipe.PreparationTime}}
+    Difficulté : {{data.recipe.Difficulty}}
+    {{data.recipe.Instructions}}
+  </mat-dialog-content>
+
+</div>
+

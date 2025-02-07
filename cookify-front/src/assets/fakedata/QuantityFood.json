@@ -1,8 +1,8 @@
 [
   {
     "Id": 1,
-    "Comment": "Delicious cake!",
-    "Rating": 5,
+    "Quantity": 200,
+    "Unity": "g",
     "Recipes": {
       "Id": 1,
       "Name": "Chocolate Cake",
@@ -18,12 +18,16 @@
         "recipeId": 1,
         "url": "image1.jpg"
       }
+    },
+    "Food": {
+      "Id": 1,
+      "Name": "Sugar"
     }
   },
   {
     "Id": 2,
-    "Comment": "Tasty and filling!",
-    "Rating": 4,
+    "Quantity": 300,
+    "Unity": "g",
     "Recipes": {
       "Id": 2,
       "Name": "Spaghetti Bolognese",
@@ -39,12 +43,16 @@
         "recipeId": 2,
         "url": "image2.jpg"
       }
+    },
+    "Food": {
+      "Id": 2,
+      "Name": "Flour"
     }
   },
   {
     "Id": 3,
-    "Comment": "A bit bland for my taste.",
-    "Rating": 3,
+    "Quantity": 100,
+    "Unity": "g",
     "Recipes": {
       "Id": 3,
       "Name": "Caesar Salad",
@@ -60,12 +68,16 @@
         "recipeId": 3,
         "url": "image3.jpg"
       }
+    },
+    "Food": {
+      "Id": 3,
+      "Name": "Lettuce"
     }
   },
   {
     "Id": 4,
-    "Comment": "Perfect for a light lunch.",
-    "Rating": 5,
+    "Quantity": 150,
+    "Unity": "g",
     "Recipes": {
       "Id": 4,
       "Name": "Avocado Toast",
@@ -81,12 +93,16 @@
         "recipeId": 4,
         "url": "image4.jpg"
       }
+    },
+    "Food": {
+      "Id": 4,
+      "Name": "Avocado"
     }
   },
   {
     "Id": 5,
-    "Comment": "Fluffy and tasty.",
-    "Rating": 4,
+    "Quantity": 4,
+    "Unity": "units",
     "Recipes": {
       "Id": 5,
       "Name": "Pancakes",
@@ -102,12 +118,16 @@
         "recipeId": 5,
         "url": "image5.jpg"
       }
+    },
+    "Food": {
+      "Id": 5,
+      "Name": "Eggs"
     }
   },
   {
     "Id": 6,
-    "Comment": "Quick and refreshing.",
-    "Rating": 5,
+    "Quantity": 1,
+    "Unity": "unit",
     "Recipes": {
       "Id": 6,
       "Name": "Smoothie",
@@ -123,6 +143,10 @@
         "recipeId": 6,
         "url": "image6.jpg"
       }
+    },
+    "Food": {
+      "Id": 6,
+      "Name": "Banana"
     }
   }
 ]

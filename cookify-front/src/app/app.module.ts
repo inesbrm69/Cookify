@@ -13,7 +13,16 @@ import { ExploreComponent } from './explore/explore.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ProfileComponent } from './profile/profile.component';
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {MatCard, MatCardActions, MatCardHeader, MatCardImage} from "@angular/material/card";
+import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardImage} from "@angular/material/card";
+import {HttpClientModule} from "@angular/common/http";
+import { RecipeComponent } from './recipe/recipe.component';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContainer,
+  MatDialogContent,
+  MatDialogTitle
+} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -23,7 +32,8 @@ import {MatCard, MatCardActions, MatCardHeader, MatCardImage} from "@angular/mat
     RegisterComponent,
     ExploreComponent,
     NavBarComponent,
-    ProfileComponent
+    ProfileComponent,
+    RecipeComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +48,14 @@ import {MatCard, MatCardActions, MatCardHeader, MatCardImage} from "@angular/mat
     MatCard,
     MatCardImage,
     MatCardHeader,
-    MatCardActions
+    MatCardActions,
+    HttpClientModule,
+    MatCardContent,
+    MatDialogContent,
+    MatDialogTitle,
+    MatDialogContainer,
+    MatDialogActions,
+    MatDialogClose
   ],
   providers: [
     provideAnimationsAsync()

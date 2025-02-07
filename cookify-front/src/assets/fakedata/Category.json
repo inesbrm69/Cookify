@@ -1,34 +1,134 @@
-{
-  "category": [
-    {
-      "Id": 1,
-      "Name": "Desserts",
-      "Recipes": [ { "Id": 101, "Name": "Tarte aux pommes", "CookingTime": 45, "Calories": 320, "Quantity": 1, "PreparationTime": 20, "Instructions": "Préchauffez le four à 180°C...", "Difficulty": "Moyen", "IsPublic": true } ]
-    },
-    {
-      "Id": 2,
-      "Name": "Plats principaux",
-      "Recipes": [ { "Id": 102, "Name": "Lasagnes végétariennes", "CookingTime": 60, "Calories": 450, "Quantity": 1, "PreparationTime": 30, "Instructions": "Faites revenir les légumes...", "Difficulty": "Difficile", "IsPublic": true } ]
-    },
-    {
-      "Id": 3,
-      "Name": "Boissons",
-      "Recipes": [ { "Id": 103, "Name": "Smoothie banane-fraise", "CookingTime": 5, "Calories": 200, "Quantity": 1, "PreparationTime": 5, "Instructions": "Mixez tous les ingrédients...", "Difficulty": "Facile", "IsPublic": true } ]
-    },
-    {
-      "Id": 4,
-      "Name": "Soupes",
-      "Recipes": [ { "Id": 104, "Name": "Soupe à la courge", "CookingTime": 30, "Calories": 150, "Quantity": 1, "PreparationTime": 15, "Instructions": "Coupez la courge et faites-la cuire...", "Difficulty": "Facile", "IsPublic": true } ]
-    },
-    {
-      "Id": 5,
-      "Name": "Entrées",
-      "Recipes": [ { "Id": 105, "Name": "Salade César", "CookingTime": 15, "Calories": 350, "Quantity": 1, "PreparationTime": 10, "Instructions": "Mélangez la salade et les croutons...", "Difficulty": "Facile", "IsPublic": true } ]
-    },
-    {
-      "Id": 6,
-      "Name": "Petit-déjeuner",
-      "Recipes": [ { "Id": 106, "Name": "Pancakes", "CookingTime": 20, "Calories": 300, "Quantity": 1, "PreparationTime": 10, "Instructions": "Mélangez tous les ingrédients...", "Difficulty": "Facile", "IsPublic": true } ]
-    }
-  ]
-}
+[
+  {
+    "Id": 1,
+    "Name": "Desserts",
+    "Recipes": [
+      {
+        "Id": 1,
+        "Name": "Chocolate Cake",
+        "CookingTime": 45,
+        "Calories": 350,
+        "Quantity": 4,
+        "PreparationTime": 30,
+        "Instructions": "Mix ingredients, bake for 45 minutes.",
+        "Difficulty": "Medium",
+        "IsPublic": true,
+        "Image": {
+          "id": 1,
+          "recipeId": 1,
+          "url": "image1.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "Main Courses",
+    "Recipes": [
+      {
+        "Id": 2,
+        "Name": "Spaghetti Bolognese",
+        "CookingTime": 60,
+        "Calories": 500,
+        "Quantity": 4,
+        "PreparationTime": 20,
+        "Instructions": "Cook pasta, prepare sauce, combine.",
+        "Difficulty": "Medium",
+        "IsPublic": true,
+        "Image": {
+          "id": 2,
+          "recipeId": 2,
+          "url": "image2.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "Salads",
+    "Recipes": [
+      {
+        "Id": 3,
+        "Name": "Caesar Salad",
+        "CookingTime": 15,
+        "Calories": 250,
+        "Quantity": 2,
+        "PreparationTime": 10,
+        "Instructions": "Toss lettuce, croutons, and dressing.",
+        "Difficulty": "Easy",
+        "IsPublic": true,
+        "Image": {
+          "id": 3,
+          "recipeId": 3,
+          "url": "image3.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "Snacks",
+    "Recipes": [
+      {
+        "Id": 4,
+        "Name": "Avocado Toast",
+        "CookingTime": 10,
+        "Calories": 200,
+        "Quantity": 1,
+        "PreparationTime": 5,
+        "Instructions": "Mash avocado, spread on toast.",
+        "Difficulty": "Easy",
+        "IsPublic": true,
+        "Image": {
+          "id": 4,
+          "recipeId": 4,
+          "url": "image4.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "Name": "Breakfast",
+    "Recipes": [
+      {
+        "Id": 5,
+        "Name": "Pancakes",
+        "CookingTime": 20,
+        "Calories": 300,
+        "Quantity": 3,
+        "PreparationTime": 10,
+        "Instructions": "Mix batter, cook pancakes.",
+        "Difficulty": "Medium",
+        "IsPublic": true,
+        "Image": {
+          "id": 5,
+          "recipeId": 5,
+          "url": "image5.jpg"
+        }
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "Name": "Beverages",
+    "Recipes": [
+      {
+        "Id": 6,
+        "Name": "Smoothie",
+        "CookingTime": 5,
+        "Calories": 150,
+        "Quantity": 2,
+        "PreparationTime": 5,
+        "Instructions": "Blend fruits and yogurt.",
+        "Difficulty": "Easy",
+        "IsPublic": true,
+        "Image": {
+          "id": 6,
+          "recipeId": 6,
+          "url": "image6.jpg"
+        }
+      }
+    ]
+  }
+]

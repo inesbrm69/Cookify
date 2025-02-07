@@ -1,3 +1,5 @@
+import {Images} from "./images";
+
 export interface Recipes {
   Id : number,
   Name : string
@@ -8,5 +10,6 @@ export interface Recipes {
   PreparationTime : number,
   Instructions : string,
   Difficulty : string,
-  IsPublic : boolean
+  IsPublic : boolean,
+  Image : Images
 }
