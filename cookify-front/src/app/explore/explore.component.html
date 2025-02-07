@@ -2,8 +2,8 @@
 
 <div class="container">
     <div class="content">
-      <div *ngIf="reciepes.length > 0; else noReciepes" class="content">
-        <mat-card *ngFor="let reciepe of reciepes" appearance="outlined">
+      <div *ngIf="recipes.length > 0; else noRecipes" class="content">
+        <mat-card *ngFor="let recipe of recipes" appearance="outlined">
           <mat-card-header>
           <!--image de la recette-->
           </mat-card-header>
@@ -13,7 +13,7 @@
         </mat-card>
       </div>
       <div>
-        <ng-template #noReciepes>
+        <ng-template #noRecipes>
           <p>Aucune recette trouvé.</p>
         </ng-template>
       </div>

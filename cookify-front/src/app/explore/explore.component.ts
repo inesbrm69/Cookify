@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Recipes} from "../interfaces/recipes";
 
 @Component({
   selector: 'app-explore',
@@ -7,11 +8,5 @@ import { Component } from '@angular/core';
 })
 export class ExploreComponent {
   isLoading: boolean = false;
-  reciepes: Reciepe[] = [];
-}
-export interface Reciepe {
-  Name : string
-  CookingTime : number
-  Desc : string
-  Calories : number
+  recipes: Recipes[] = [];
 }
