@@ -1,0 +1,34 @@
+{
+  "category": [
+    {
+      "Id": 1,
+      "Name": "Desserts",
+      "Recipes": [ { "Id": 101, "Name": "Tarte aux pommes", "CookingTime": 45, "Calories": 320, "Quantity": 1, "PreparationTime": 20, "Instructions": "Préchauffez le four à 180°C...", "Difficulty": "Moyen", "IsPublic": true } ]
+    },
+    {
+      "Id": 2,
+      "Name": "Plats principaux",
+      "Recipes": [ { "Id": 102, "Name": "Lasagnes végétariennes", "CookingTime": 60, "Calories": 450, "Quantity": 1, "PreparationTime": 30, "Instructions": "Faites revenir les légumes...", "Difficulty": "Difficile", "IsPublic": true } ]
+    },
+    {
+      "Id": 3,
+      "Name": "Boissons",
+      "Recipes": [ { "Id": 103, "Name": "Smoothie banane-fraise", "CookingTime": 5, "Calories": 200, "Quantity": 1, "PreparationTime": 5, "Instructions": "Mixez tous les ingrédients...", "Difficulty": "Facile", "IsPublic": true } ]
+    },
+    {
+      "Id": 4,
+      "Name": "Soupes",
+      "Recipes": [ { "Id": 104, "Name": "Soupe à la courge", "CookingTime": 30, "Calories": 150, "Quantity": 1, "PreparationTime": 15, "Instructions": "Coupez la courge et faites-la cuire...", "Difficulty": "Facile", "IsPublic": true } ]
+    },
+    {
+      "Id": 5,
+      "Name": "Entrées",
+      "Recipes": [ { "Id": 105, "Name": "Salade César", "CookingTime": 15, "Calories": 350, "Quantity": 1, "PreparationTime": 10, "Instructions": "Mélangez la salade et les croutons...", "Difficulty": "Facile", "IsPublic": true } ]
+    },
+    {
+      "Id": 6,
+      "Name": "Petit-déjeuner",
+      "Recipes": [ { "Id": 106, "Name": "Pancakes", "CookingTime": 20, "Calories": 300, "Quantity": 1, "PreparationTime": 10, "Instructions": "Mélangez tous les ingrédients...", "Difficulty": "Facile", "IsPublic": true } ]
+    }
+  ]
+}

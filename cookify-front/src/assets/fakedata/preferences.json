@@ -1,0 +1,10 @@
+{
+  "preferences": [
+    { "Id": 1, "Diet": "Végétarien", "Allergy": "Gluten", "MealQuantity": 3 },
+    { "Id": 2, "Diet": "Sans lactose", "Allergy": "Arachides", "MealQuantity": 2 },
+    { "Id": 3, "Diet": "Végan", "Allergy": "Aucune", "MealQuantity": 4 },
+    { "Id": 4, "Diet": "Omnivore", "Allergy": "Fruits de mer", "MealQuantity": 3 },
+    { "Id": 5, "Diet": "Cétogène", "Allergy": "Lait", "MealQuantity": 2 },
+    { "Id": 6, "Diet": "Méditerranéen", "Allergy": "Œufs", "MealQuantity": 3 }
+  ]
+}

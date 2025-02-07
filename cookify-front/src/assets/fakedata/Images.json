@@ -1,0 +1,10 @@
+{
+  "images": [
+    { "id": 1, "recipeId": 101, "url": "https://example.com/tarte.jpg" },
+    { "id": 2, "recipeId": 102, "url": "https://example.com/lasagnes.jpg" },
+    { "id": 3, "recipeId": 103, "url": "https://example.com/smoothie.jpg" },
+    { "id": 4, "recipeId": 104, "url": "https://example.com/soupe.jpg" },
+    { "id": 5, "recipeId": 105, "url": "https://example.com/salade.jpg" },
+    { "id": 6, "recipeId": 106, "url": "https://example.com/pancakes.jpg" }
+  ]
+}

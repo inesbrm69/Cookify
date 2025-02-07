@@ -1,0 +1,10 @@
+{
+  "food": [
+    { "Id": 1, "Name": "Farine", "QuantityFood": { "Id": 1, "Quantity": 250, "Unity": "g" } },
+    { "Id": 2, "Name": "Lait", "QuantityFood": { "Id": 2, "Quantity": 500, "Unity": "ml" } },
+    { "Id": 3, "Name": "Œufs", "QuantityFood": { "Id": 3, "Quantity": 3, "Unity": "pcs" } },
+    { "Id": 4, "Name": "Beurre", "QuantityFood": { "Id": 4, "Quantity": 100, "Unity": "g" } },
+    { "Id": 5, "Name": "Tomates", "QuantityFood": { "Id": 5, "Quantity": 3, "Unity": "pcs" } },
+    { "Id": 6, "Name": "Fromage", "QuantityFood": { "Id": 6, "Quantity": 150, "Unity": "g" } }
+  ]
+}
