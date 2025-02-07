@@ -77,11 +77,18 @@ class Recipes
     #[Groups("getAllRecipes")]
     private ?User $createdBy = null;
 
+    /**
+     * @var Collection<int, RecipesList>
+     */
+    #[ORM\ManyToMany(targetEntity: RecipesList::class, mappedBy: 'recipes')]
+    private Collection $recipesLists;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->notices = new ArrayCollection();
         $this->ingredients = new ArrayCollection();
+        $this->recipesLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -292,6 +299,33 @@ class Recipes
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipesList>
+     */
+    public function getRecipesLists(): Collection
+    {
+        return $this->recipesLists;
+    }
+
+    public function addRecipesList(RecipesList $recipesList): static
+    {
+        if (!$this->recipesLists->contains($recipesList)) {
+            $this->recipesLists->add($recipesList);
+            $recipesList->addRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipesList(RecipesList $recipesList): static
+    {
+        if ($this->recipesLists->removeElement($recipesList)) {
+            $recipesList->removeRecipe($this);
+        }
 
         return $this;
     }

@@ -44,23 +44,6 @@ final class RecipesController extends AbstractController
     }
 
     /**
-     * Renvoie un nombre donné de recettes aléatoires
-     *
-     * @param RecipesRepository $recipesRepository
-     * @param SerializerInterface $serializer
-     * @param int $count
-     * @return JsonResponse
-     */
-    #[Route('/api/recipes/random/{count}', name: 'recipe.random', methods: ['GET'])]
-    public function getRandomRecipes(
-        RecipesRepository $recipesRepository,
-        SerializerInterface $serializer,
-        int $count
-    ): JsonResponse {
-        
-    }
-
-    /**
      * Renvoie un nombre donné de recettes aléatoires en fonction des catégories choisies
      *
      * @param RecipesRepository $recipesRepository
@@ -123,35 +106,6 @@ final class RecipesController extends AbstractController
         }
 
         return new JsonResponse($jsonRecipes, 200, [], true);
-    }
-
-    /**
-     * Remplace une recette spécifique par une autre sélectionnée
-     *
-     * @param RecipesRepository $recipesRepository
-     * @param int $oldRecipeId
-     * @param int $newRecipeId
-     * @return JsonResponse
-     */
-    #[Route('/api/recipes/replace/{oldRecipeId}/{newRecipeId}', name: 'recipe.replace.selected', methods: ['PUT'])]
-    public function replaceRecipeWithSelected(
-        RecipesRepository $recipesRepository,
-        int $oldRecipeId,
-        int $newRecipeId
-    ): JsonResponse {
-        // Vérifier si les deux recettes existent
-        $oldRecipe = $recipesRepository->find($oldRecipeId);
-        $newRecipe = $recipesRepository->find($newRecipeId);
-
-        if (!$oldRecipe || !$newRecipe) {
-            return new JsonResponse(['error' => 'Une des recettes n\'existe pas'], 404);
-        }
-
-        return new JsonResponse([
-            'message' => 'Recette remplacée avec succès',
-            'oldRecipe' => ['id' => $oldRecipe->getId(), 'name' => $oldRecipe->getName()],
-            'newRecipe' => ['id' => $newRecipe->getId(), 'name' => $newRecipe->getName()]
-        ], 200);
     }
 
     /**
@@ -222,38 +176,6 @@ final class RecipesController extends AbstractController
                 'createdBy' => $user->getUserIdentifier(),
             ]
         ], 201);
-    }
-
-    /**
-     * Supprime une recette de la liste sélectionnée (sans supprimer la recette en base)
-     *
-     * @param int $recipeId
-     * @param SessionInterface $session
-     * @return JsonResponse
-     */
-    #[Route('/api/recipes/remove/{recipeId}', name: 'recipe.remove', methods: ['DELETE'])]
-    public function removeRecipeFromList(int $recipeId, SessionInterface $session): JsonResponse
-    {
-        // Récupérer la liste actuelle des recettes depuis la session
-        $selectedRecipes = $session->get('selected_recipes', []);
-
-        // Vérifier si la recette est dans la liste
-        if (!in_array($recipeId, $selectedRecipes)) {
-            return new JsonResponse([
-                'error' => 'La recette n\'est pas dans la liste'
-            ], 404);
-        }
-
-        // Supprimer la recette de la liste
-        $selectedRecipes = array_filter($selectedRecipes, fn($id) => $id != $recipeId);
-
-        // Sauvegarder la liste mise à jour en session
-        $session->set('selected_recipes', array_values($selectedRecipes));
-
-        return new JsonResponse([
-            'message' => 'Recette retirée de la liste avec succès',
-            'updatedList' => $selectedRecipes
-        ], 200);
     }
 }
 
