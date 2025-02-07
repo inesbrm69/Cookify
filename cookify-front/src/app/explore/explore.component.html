@@ -1,0 +1,25 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="container">
+    <div class="content">
+      <div *ngIf="recipes.length > 0; else noRecipes" class="content">
+        <mat-card *ngFor="let recipe of recipes" appearance="outlined">
+          <mat-card-header>
+          <!--image de la recette-->
+          </mat-card-header>
+          <mat-card-actions>
+
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div>
+        <ng-template #noRecipes>
+          <p>Aucune recette trouvé.</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+</div>
