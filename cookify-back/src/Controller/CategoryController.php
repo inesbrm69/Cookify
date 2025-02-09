@@ -17,6 +17,29 @@ final class CategoryController extends AbstractController
         ]);
     }
 
+     /**
+     * Renvoie toutes les catégories
+     *
+     * @param CategoryRepository $repository
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
+    #[Route('/api/categories', name: 'category.getAll', methods:['GET'])]
+    public function getAllCategories(
+        CategoryRepository $repository,
+        SerializerInterface $serializer
+        ): JsonResponse
+    {
+        $categ =  $repository->findAll();
+        $jsonCateg = $serializer->serialize($categ, 'json',["groups" => "getAllCategories"]);
+        return new JsonResponse(    
+            $jsonCateg,
+            Response::HTTP_OK, 
+            [], 
+            true
+        );
+    }
+
     /**
      * Renvoie toutes les recettes par rapport à une catégorie
      *
@@ -37,6 +60,5 @@ final class CategoryController extends AbstractController
 
         return new JsonResponse($jsonRecipes, 200, [], true);
     }
-
 
 }

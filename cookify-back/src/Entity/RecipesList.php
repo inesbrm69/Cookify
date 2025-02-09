@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RecipesListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipesListRepository::class)]
@@ -15,10 +16,15 @@ class RecipesList
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255, nullable: false)]
+    private string $name = '';
+
+
     /**
      * @var Collection<int, Recipes>
      */
     #[ORM\ManyToMany(targetEntity: Recipes::class, inversedBy: 'recipesLists')]
+    #[Groups("getAllRecipes", "getRecipesByCategorie", "getAllCategories", "getAllFoods")]
     private Collection $recipes;
 
     #[ORM\ManyToOne(inversedBy: 'recipesLists')]
@@ -33,6 +39,18 @@ class RecipesList
     {
         return $this->id;
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+        return $this;
+    }
+
 
     /**
      * @return Collection<int, Recipes>

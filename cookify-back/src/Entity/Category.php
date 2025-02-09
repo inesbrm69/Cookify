@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -15,9 +16,10 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups("getAllRecipes", "getRecipesByCategorie")]
-    private ?string $name = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Groups("getAllRecipes", "getRecipesByCategorie", "getAllCategories")]
+    private string $name;
+
 
     /**
      * @var Collection<int, Recipes>
@@ -35,7 +37,7 @@ class Category
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

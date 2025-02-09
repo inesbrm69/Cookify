@@ -2,12 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\RecipesRepository;
 use App\Entity\Recipes;
+use App\Entity\QuantityFood;
+use App\Entity\Food;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 final class RecipesController extends AbstractController
 {
@@ -20,162 +26,83 @@ final class RecipesController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      * Renvoie toutes les recettes
-     *
-     * @param RecipesRepository $repository
-     * @param SerializerInterface $serializer
-     * @return JsonResponse
      */
-    #[Route('/api/recipes', name: 'recipe.getAll', methods:['GET'])]
+    #[Route('/api/recipes', name: 'recipe.getAll', methods: ['GET'])]
     public function getAllRecipes(
         RecipesRepository $repository,
         SerializerInterface $serializer
-        ): JsonResponse
-    {
-        $recipes =  $repository->findAll();
-        $jsonRecipes = $serializer->serialize($recipes, 'json',["groups" => "getAllRecipes"]);
-        return new JsonResponse(    
-            $jsonRecipes,
-            Response::HTTP_OK, 
-            [], 
-            true
-        );
-    }
-
-    /**
-     * Renvoie un nombre donné de recettes aléatoires en fonction des catégories choisies
-     *
-     * @param RecipesRepository $recipesRepository
-     * @param CategoryRepository $categoryRepository
-     * @param SerializerInterface $serializer
-     * @param int $count
-     * @param Request $request
-     * @return JsonResponse
-     */
-    #[Route('/api/recipes/random/{count}', name: 'recipe.random.filtered', methods: ['GET'])]
-    public function getRandomRecipesByCategories(
-        RecipesRepository $recipesRepository,
-        CategoryRepository $categoryRepository,
-        SerializerInterface $serializer,
-        int $count,
-        Request $request
     ): JsonResponse {
-        // Récupérer les IDs des catégories depuis les paramètres GET
-        $categoryIds = $request->query->get('categories'); // Exemple: ?categories=1,2,3
-
-        if (!$categoryIds) {
-            // Récupérer toutes les recettes
-            $allRecipes = $recipesRepository->findAll();
-
-            if(!$allRecipes) {
-                return new JsonResponse([
-                    'error' => 'Aucune recette trouvée'
-                ], 404);
-            }
-            if (count($allRecipes) < $count) {
-                return new JsonResponse([
-                    'error' => 'Nombre de recettes demandé trop grand'
-                ], 400);
-            }
-            // Mélanger aléatoirement et sélectionner `$count` recettes
-            shuffle($allRecipes);
-            $randomRecipes = array_slice($allRecipes, 0, $count);
-            // Sérialiser en JSON
-            $jsonRecipes = $serializer->serialize($randomRecipes, 'json', ['groups' => 'getRecipes']);
-        }else{
-            // Convertir les IDs en tableau
-            $categoryIdsArray = explode(',', $categoryIds);
-
-            // Récupérer les recettes appartenant aux catégories sélectionnées
-            $recipes = $recipesRepository->findByCategories($categoryIdsArray);
-
-            // Vérifier si on a assez de recettes
-            if (count($recipes) < $count) {
-                return new JsonResponse([
-                    'error' => 'Nombre de recettes demandé trop grand pour ces catégories'
-                ], 400);
-            }
-
-            // Mélanger aléatoirement et sélectionner `$count` recettes
-            shuffle($recipes);
-            $randomRecipes = array_slice($recipes, 0, $count);
-
-            // Sérialiser en JSON
-            $jsonRecipes = $serializer->serialize($randomRecipes, 'json', ['groups' => 'getRecipes']);
-        }
-
-        return new JsonResponse($jsonRecipes, 200, [], true);
+        $recipes = $repository->findAll();
+        $jsonRecipes = $serializer->serialize($recipes, 'json', ["groups" => "getAllRecipes"]);
+        return new JsonResponse($jsonRecipes, Response::HTTP_OK, [], true);
     }
 
     /**
-     * Permet à un utilisateur authentifié de créer une recette
-     *
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param Security $security
-     * @param CategoryRepository $categoryRepository
-     * @return JsonResponse
+     * Crée une recette avec ses ingrédients et instructions
      */
-    #[Route('/api/recipes/create', name: 'recipe.create', methods: ['POST'])]
+    #[Route('/api/recipes/create', name: 'recipes.create', methods: ['POST'])]
     public function createRecipe(
         Request $request,
-        Recipes $recipe,
-        EntityManagerInterface $entityManager,
-        Security $security,
-        CategoryRepository $categoryRepository
+        EntityManagerInterface $entityManager
     ): JsonResponse {
-        // Vérifier que l'utilisateur est connecté
-        $user = $security->getUser();
-        if (!$user) {
-            return new JsonResponse(['error' => 'Vous devez être connecté pour créer une recette'], 401);
-        }
-
-        // Récupérer les données JSON envoyées
         $data = json_decode($request->getContent(), true);
-        if (!$data) {
-            return new JsonResponse(['error' => 'Données invalides'], 400);
+
+        // Vérification des données
+        if (!isset($data['name'], $data['cookingTime'], $data['description'], 
+                   $data['calories'], $data['quantity'], $data['preparationTime'], 
+                   $data['difficulty'], $data['isPublic'], $data['ingredients'], $data['instructions'])) {
+            return new JsonResponse(['error' => 'Données incomplètes'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Vérifier que toutes les informations essentielles sont présentes
-        if (!isset($data['name'], $data['cookingTime'], $data['description'], $data['calories'], 
-            $data['quantity'], $data['preparationTime'], $data['instructions'], 
-            $data['difficulty'], $data['isPublic'], $data['categories'])) {
-            return new JsonResponse(['error' => 'Données incomplètes'], 400);
-        }
-
-        // Créer une nouvelle recette
+        // Création de la recette
+        $recipe = new Recipes();
         $recipe->setName($data['name'])
-        ->setCookingTime($data['cookingTime'])
-        ->setDescription($data['description'])
-        ->setCalories($data['calories'])
-        ->setQuantity($data['quantity'])
-        ->setPreparationTime($data['preparationTime'])
-        ->setInstructions($data['instructions'])
-        ->setDifficulty($data['difficulty'])
-        ->setIsPublic($data['isPublic'])
-        ->setCreatedBy($user); // Associer la recette à l'utilisateur connecté
+            ->setCookingTime($data['cookingTime'])
+            ->setDescription($data['description'])
+            ->setCalories($data['calories'])
+            ->setQuantity($data['quantity'])
+            ->setPreparationTime($data['preparationTime'])
+            ->setDifficulty($data['difficulty'])
+            ->setIsPublic($data['isPublic']);
 
-        // Ajouter les catégories
-        foreach ($data['categories'] as $categoryId) {
-            $category = $categoryRepository->find($categoryId);
-            if ($category) {
-                $recipe->addCategory($category);
+        // Ajout des ingrédients
+        foreach ($data['ingredients'] as $ingredientData) {
+            if (!isset($ingredientData['foodId'], $ingredientData['quantity'], $ingredientData['unity'])) {
+                return new JsonResponse(['error' => 'Données ingrédient incomplètes'], Response::HTTP_BAD_REQUEST);
             }
+
+            $food = $entityManager->getRepository(Food::class)->find($ingredientData['foodId']);
+            if (!$food) {
+                return new JsonResponse(['error' => 'Ingrédient non trouvé'], Response::HTTP_NOT_FOUND);
+            }
+
+            $quantityFood = new QuantityFood();
+            $quantityFood->setQuantity($ingredientData['quantity'])
+                ->setUnity($ingredientData['unity'])
+                ->setRecipeId($recipe)
+                ->setFoodId($food);
+
+            $entityManager->persist($quantityFood);
+            $recipe->addIngredient($quantityFood);
         }
 
-        // Sauvegarde en base de données
+        // Ajout des instructions (avec vérification)
+        if (!empty($data['instructions']) && is_array($data['instructions'])) {
+            $instructions = implode("\n", $data['instructions']);
+            $recipe->setInstructions($instructions);
+        } else {
+            return new JsonResponse(['error' => 'Instructions invalides'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Sauvegarde en base
         $entityManager->persist($recipe);
         $entityManager->flush();
 
         return new JsonResponse([
             'message' => 'Recette créée avec succès',
-            'recipe' => [
-                'id' => $recipe->getId(),
-                'name' => $recipe->getName(),
-                'createdBy' => $user->getUserIdentifier(),
-            ]
-        ], 201);
+            'recipeId' => $recipe->getId()
+        ], Response::HTTP_CREATED);
     }
 }
-

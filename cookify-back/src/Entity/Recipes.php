@@ -17,9 +17,9 @@ class Recipes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Groups("getRecipes", "getAllRecipes", "getRecipesByCategorie")]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column]
     #[Groups("getAllRecipes")]
@@ -63,15 +63,16 @@ class Recipes
      * @var Collection<int, Notice>
      */
     #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'recipes')]
-    #[Groups("getAllRecipes")]
+    #[Groups(["getAllRecipes"])]
     private Collection $notices;
 
     /**
      * @var Collection<int, QuantityFood>
      */
     #[ORM\OneToMany(targetEntity: QuantityFood::class, mappedBy: 'recipeId', orphanRemoval: true)]
-    #[Groups("getAllRecipes")]
+    #[Groups(["getAllRecipes"])]
     private Collection $ingredients;
+
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[Groups("getAllRecipes")]
@@ -96,7 +97,7 @@ class Recipes
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
