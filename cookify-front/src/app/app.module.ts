@@ -23,6 +23,12 @@ import {
   MatDialogContent,
   MatDialogTitle
 } from "@angular/material/dialog";
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 @NgModule({
   declarations: [
@@ -33,7 +39,8 @@ import {
     ExploreComponent,
     NavBarComponent,
     ProfileComponent,
-    RecipeComponent
+    RecipeComponent,
+    RecipeFormComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +62,14 @@ import {
     MatDialogTitle,
     MatDialogContainer,
     MatDialogActions,
-    MatDialogClose
+    MatDialogClose,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatSlideToggle,
+    MatError,
+    MatLabel,
+    MaterialFileInputModule
   ],
   providers: [
     provideAnimationsAsync()

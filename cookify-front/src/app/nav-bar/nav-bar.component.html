@@ -9,8 +9,7 @@
 
   </div>
   <div class="content">
-    <button mat-icon-button color="warn" aria-label="Add">
-      <!--ajouter un oonClick-->
+    <button mat-icon-button color="warn" aria-label="Add" (click)="openDialog()">
       <mat-icon>add</mat-icon>
     </button>
     <a mat-icon-button title="Profil" [routerLink]="['/profil']">
