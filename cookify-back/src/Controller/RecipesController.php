@@ -8,6 +8,7 @@ use App\Entity\QuantityFood;
 use App\Entity\Food;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,44 +43,53 @@ final class RecipesController extends AbstractController
     /**
      * Crée une recette avec ses ingrédients et instructions
      */
-    #[Route('/api/recipes/create', name: 'recipes.create', methods: ['POST'])]
+    #[Route('/api/recipes/create', name: 'create_recipe', methods: ['POST'])]
     public function createRecipe(
         Request $request,
         EntityManagerInterface $entityManager
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
-        // Vérification des données
-        if (!isset($data['name'], $data['cookingTime'], $data['description'], 
-                   $data['calories'], $data['quantity'], $data['preparationTime'], 
-                   $data['difficulty'], $data['isPublic'], $data['ingredients'], $data['instructions'])) {
-            return new JsonResponse(['error' => 'Données incomplètes'], Response::HTTP_BAD_REQUEST);
+        // Vérification des données obligatoires de la recette
+        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'isPublic', 'ingredients', 'instructions'];
+        foreach ($requiredFields as $field) {
+            if (!isset($data[$field]) || empty($data[$field])) {
+                return new JsonResponse(['error' => "Le champ '$field' est manquant ou vide"], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         // Création de la recette
         $recipe = new Recipes();
         $recipe->setName($data['name'])
-            ->setCookingTime($data['cookingTime'])
+            ->setCookingTime((int) $data['cookingTime'])
             ->setDescription($data['description'])
-            ->setCalories($data['calories'])
-            ->setQuantity($data['quantity'])
-            ->setPreparationTime($data['preparationTime'])
+            ->setCalories((int) $data['calories'])
+            ->setQuantity((int) $data['quantity'])
+            ->setPreparationTime((int) $data['preparationTime'])
             ->setDifficulty($data['difficulty'])
-            ->setIsPublic($data['isPublic']);
+            ->setIsPublic((bool) $data['isPublic']);
 
         // Ajout des ingrédients
+        if (!is_array($data['ingredients']) || empty($data['ingredients'])) {
+            return new JsonResponse(['error' => 'Les ingrédients doivent être un tableau non vide'], Response::HTTP_BAD_REQUEST);
+        }
+
         foreach ($data['ingredients'] as $ingredientData) {
-            if (!isset($ingredientData['foodId'], $ingredientData['quantity'], $ingredientData['unity'])) {
+            if (!isset($ingredientData['name'], $ingredientData['quantity'], $ingredientData['unity'])) {
                 return new JsonResponse(['error' => 'Données ingrédient incomplètes'], Response::HTTP_BAD_REQUEST);
             }
 
-            $food = $entityManager->getRepository(Food::class)->find($ingredientData['foodId']);
+            // Rechercher ou créer l'aliment
+            $food = $entityManager->getRepository(Food::class)->findOneBy(['name' => $ingredientData['name']]);
             if (!$food) {
-                return new JsonResponse(['error' => 'Ingrédient non trouvé'], Response::HTTP_NOT_FOUND);
+                $food = new Food();
+                $food->setName($ingredientData['name']);
+                $entityManager->persist($food);
             }
 
+            // Création de la relation Quantité-Ingrédient
             $quantityFood = new QuantityFood();
-            $quantityFood->setQuantity($ingredientData['quantity'])
+            $quantityFood->setQuantity((int) $ingredientData['quantity'])
                 ->setUnity($ingredientData['unity'])
                 ->setRecipeId($recipe)
                 ->setFoodId($food);
@@ -88,15 +98,15 @@ final class RecipesController extends AbstractController
             $recipe->addIngredient($quantityFood);
         }
 
-        // Ajout des instructions (avec vérification)
-        if (!empty($data['instructions']) && is_array($data['instructions'])) {
+        // Ajout des instructions (conversion en texte si c'est un tableau)
+        if (is_array($data['instructions'])) {
             $instructions = implode("\n", $data['instructions']);
             $recipe->setInstructions($instructions);
         } else {
-            return new JsonResponse(['error' => 'Instructions invalides'], Response::HTTP_BAD_REQUEST);
+            $recipe->setInstructions($data['instructions']);
         }
 
-        // Sauvegarde en base
+        // Sauvegarde de la recette dans la base de données
         $entityManager->persist($recipe);
         $entityManager->flush();
 
