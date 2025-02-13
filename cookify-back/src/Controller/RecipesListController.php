@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\RecipesList;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipesRepository;
+use App\Repository\RecipesListRepository;
 use App\Repository\PreferencesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -193,4 +194,59 @@ final class RecipesListController extends AbstractController
         ], 200);
     }
 
+    /**
+     * Met à jour une recette dans une liste en remplaçant une recette par une autre
+     *
+     * @param int $listId
+     * @param int $oldRecipeId
+     * @param int $newRecipeId
+     * @param RecipesListRepository $recipeListRepository
+     * @param RecipesRepository $recipesRepository
+     * @param EntityManagerInterface $entityManager
+     * @return JsonResponse
+     */
+    #[Route('/api/recipelist/{listId}/update/{oldRecipeId}/with/{newRecipeId}', name: 'recipelist.updateRecipe', methods: ['PUT'])]
+    public function updateRecipeInList(
+        int $listId,
+        int $oldRecipeId,
+        int $newRecipeId,
+        RecipesListRepository $recipeListRepository,
+        RecipesRepository $recipesRepository,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
+        // Récupérer la liste de recettes
+        $recipeList = $recipeListRepository->find($listId);
+        if (!$recipeList) {
+            return new JsonResponse(['error' => 'Liste non trouvée'], 404);
+        }
+
+        // Récupérer l'ancienne recette
+        $oldRecipe = $recipesRepository->find($oldRecipeId);
+        if (!$oldRecipe) {
+            return new JsonResponse(['error' => 'Ancienne recette non trouvée'], 404);
+        }
+
+        // Vérifier si l'ancienne recette est dans la liste
+        if (!$recipeList->getRecipes()->contains($oldRecipe)) {
+            return new JsonResponse(['error' => 'La recette à remplacer n\'est pas dans cette liste'], 400);
+        }
+
+        // Récupérer la nouvelle recette
+        $newRecipe = $recipesRepository->find($newRecipeId);
+        if (!$newRecipe) {
+            return new JsonResponse(['error' => 'Nouvelle recette non trouvée'], 404);
+        }
+
+        // Remplacer l'ancienne recette par la nouvelle
+        $recipeList->removeRecipe($oldRecipe);
+        $recipeList->addRecipe($newRecipe);
+
+        // Sauvegarder les changements
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'message' => 'Recette mise à jour avec succès dans la liste',
+            'updatedList' => array_map(fn($r) => ['id' => $r->getId(), 'name' => $r->getName()], $recipeList->getRecipes()->toArray())
+        ], 200);
+    }
 }
