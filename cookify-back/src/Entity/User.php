@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])] // Rendre le username unique
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, nullable: true)]
     private ?string $email = null;
 
     /**
@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)] // Déclare le champ username comme unique
     private ?string $username = null;
 
     /**
@@ -55,10 +55,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Recipes::class, mappedBy: 'createdBy')]
     private Collection $recipes;
 
+    /**
+     * @var Collection<int, RecipesList>
+     */
+    #[ORM\OneToMany(targetEntity: RecipesList::class, mappedBy: 'owner')]
+    private Collection $recipesLists;
+
     public function __construct()
     {
         $this->preferences = new ArrayCollection();
         $this->recipes = new ArrayCollection();
+        $this->recipesLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,7 +92,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -220,6 +227,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($recipe->getCreatedBy() === $this) {
                 $recipe->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipesList>
+     */
+    public function getRecipesLists(): Collection
+    {
+        return $this->recipesLists;
+    }
+
+    public function addRecipesList(RecipesList $recipesList): static
+    {
+        if (!$this->recipesLists->contains($recipesList)) {
+            $this->recipesLists->add($recipesList);
+            $recipesList->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipesList(RecipesList $recipesList): static
+    {
+        if ($this->recipesLists->removeElement($recipesList)) {
+            // set the owning side to null (unless already changed)
+            if ($recipesList->getOwner() === $this) {
+                $recipesList->setOwner(null);
             }
         }
 

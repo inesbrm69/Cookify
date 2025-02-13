@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PreferencesRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PreferencesRepository::class)]

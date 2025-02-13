@@ -17,16 +17,16 @@ class Recipes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups("getRecipes", "getAllRecipes", "getRecipesByCategorie")]
-    private ?string $name = null;
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategorie'])]
+    private string $name;
 
     #[ORM\Column]
     #[Groups("getAllRecipes")]
     private ?int $cookingTime = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups("getRecipes", "getAllRecipes")]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes'])]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -57,31 +57,40 @@ class Recipes
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'recipes')]
+    #[Groups("getAllRecipes")]
     private Collection $categories;
 
     /**
      * @var Collection<int, Notice>
      */
     #[ORM\OneToMany(targetEntity: Notice::class, mappedBy: 'recipes')]
-    #[Groups("getAllRecipes")]
+    #[Groups(["getAllRecipes"])]
     private Collection $notices;
 
     /**
      * @var Collection<int, QuantityFood>
      */
     #[ORM\OneToMany(targetEntity: QuantityFood::class, mappedBy: 'recipeId', orphanRemoval: true)]
-    #[Groups("getAllRecipes")]
+    #[Groups(["getAllRecipes"])]
     private Collection $ingredients;
+
 
     #[ORM\ManyToOne(inversedBy: 'recipes')]
     #[Groups("getAllRecipes")]
     private ?User $createdBy = null;
+
+    /**
+     * @var Collection<int, RecipesList>
+     */
+    #[ORM\ManyToMany(targetEntity: RecipesList::class, mappedBy: 'recipes')]
+    private Collection $recipesLists;
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
         $this->notices = new ArrayCollection();
         $this->ingredients = new ArrayCollection();
+        $this->recipesLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,7 +98,7 @@ class Recipes
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -292,6 +301,33 @@ class Recipes
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RecipesList>
+     */
+    public function getRecipesLists(): Collection
+    {
+        return $this->recipesLists;
+    }
+
+    public function addRecipesList(RecipesList $recipesList): static
+    {
+        if (!$this->recipesLists->contains($recipesList)) {
+            $this->recipesLists->add($recipesList);
+            $recipesList->addRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecipesList(RecipesList $recipesList): static
+    {
+        if ($this->recipesLists->removeElement($recipesList)) {
+            $recipesList->removeRecipe($this);
+        }
 
         return $this;
     }
