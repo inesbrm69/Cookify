@@ -18,7 +18,7 @@ class Recipes
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategorie'])]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategory'])]
     private string $name;
 
     #[ORM\Column]
@@ -26,7 +26,7 @@ class Recipes
     private ?int $cookingTime = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes'])]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategory'])]
     private ?string $description = null;
 
     #[ORM\Column]
