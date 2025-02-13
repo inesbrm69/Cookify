@@ -28,7 +28,7 @@ final class RecipesListController extends AbstractController
     }
 
     #[Route('/api/recipelist/{listId}', name: 'recipelist.get', methods: ['GET'])]
-    public function getRecipeList(int $listId, RecipeListRepository $recipeListRepository): JsonResponse {
+    public function getRecipeList(int $listId, RecipesListRepository $recipeListRepository): JsonResponse {
         $recipeList = $recipeListRepository->find($listId);
         if (!$recipeList) {
             return new JsonResponse(['error' => 'Liste non trouvée'], 404);
