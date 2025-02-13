@@ -2,11 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Entity\RecipesList;
+use App\Repository\CategoryRepository;
+use App\Repository\RecipesRepository;
+use App\Repository\PreferencesRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class RecipesListController extends AbstractController
 {
@@ -36,122 +43,111 @@ final class RecipesListController extends AbstractController
 
     /**
      * Génère une liste aléatoire de recettes en fonction des préférences de l'utilisateur
-     *
-     * @param int $count
-     * @param Request $request
-     * @param RecipesList $recipesList
-     * @param RecipesRepository $recipesRepository
-     * @param CategoryRepository $categoryRepository
-     * @param EntityManagerInterface $entityManager
-     * @param Security $security
-     * @return JsonResponse
-     */
+    */
     #[Route('/api/recipelist/generate/{count}', name: 'recipelist.generate', methods: ['POST'])]
     public function generateRecipeList(
         int $count,
         Request $request,
-        RecipesList $recipesList,
         RecipesRepository $recipesRepository,
-        CategoryRepository $categoryRepository,
+        PreferencesRepository $preferencesRepository, // Injection correcte
         EntityManagerInterface $entityManager,
-        Security $security
+        SerializerInterface $serializer
     ): JsonResponse {
-        // Vérifier que l'utilisateur est connecté
-        $user = $security->getUser();
-        if (!$user) {
-            return new JsonResponse(['error' => 'Vous devez être connecté'], 401);
+        // Vérifier que le nombre demandé est valide
+        if ($count <= 0) {
+            return new JsonResponse(['error' => 'Le nombre de recettes doit être supérieur à 0'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Récupérer les préférences depuis le JSON envoyé
+        // Décoder les préférences envoyées dans la requête
         $data = json_decode($request->getContent(), true);
-        $categoryIds = $data['categories'] ?? []; // Ex: [1, 3, 5]
-        
-        // Si aucune catégorie spécifiée, récupérer toutes les recettes
-        if (empty($categoryIds)) {
-            $recipes = $recipesRepository->findAll();
-        } else {
-            $recipes = $recipesRepository->findByCategories($categoryIds);
+        if ($data === null || !isset($data['preferences'])) {
+            return new JsonResponse(['error' => 'Les préférences sont requises'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Vérifier s'il y a assez de recettes
+        $preferences = $data['preferences'];
+        $diet = $preferences['diet'] ?? null; // Préférence de régime alimentaire
+        $allergy = $preferences['allergy'] ?? null; // Préférence d'allergie
+
+        // Vérifier qu'au moins un des champs (diet ou allergy) est fourni
+        if (!$diet && !$allergy) {
+            return new JsonResponse(
+                ['error' => 'Veuillez spécifier au moins un régime alimentaire (diet) ou une allergie (allergy)'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Recherche des recettes en fonction des préférences
+        $recipes = [];
+        if ($diet) {
+            $dietPreference = $preferencesRepository->findOneBy(['diet' => $diet]);
+            if (!$dietPreference) {
+                return new JsonResponse(['error' => 'Le régime alimentaire spécifié n\'existe pas'], Response::HTTP_BAD_REQUEST);
+            }
+            $recipes = $recipesRepository->findByDiet($diet);
+        }
+
+        if ($allergy) {
+            $allergyPreference = $preferencesRepository->findOneBy(['allergy' => $allergy]);
+            if (!$allergyPreference) {
+                return new JsonResponse(['error' => 'L\'allergie spécifiée n\'existe pas'], Response::HTTP_BAD_REQUEST);
+            }
+            $recipesByAllergy = $recipesRepository->findByAllergy($allergy);
+
+            // Fusionner les recettes si `diet` est aussi fourni
+            $recipes = $diet ? array_intersect($recipes, $recipesByAllergy) : $recipesByAllergy;
+        }
+
+        // Vérifier qu'il y a des recettes disponibles
+        if (empty($recipes)) {
+            return new JsonResponse(['error' => 'Aucune recette ne correspond à vos préférences'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Vérifier que le nombre demandé est possible
         if (count($recipes) < $count) {
-            return new JsonResponse([
-                'error' => 'Pas assez de recettes disponibles selon vos critères'
-            ], 400);
+            return new JsonResponse(
+                ['error' => 'Pas assez de recettes correspondant à vos préférences (' . count($recipes) . ' trouvées pour ' . $count . ' demandées)'],
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        // Mélanger et sélectionner $count recettes aléatoirement
+        // Mélanger et sélectionner les recettes demandées
         shuffle($recipes);
         $selectedRecipes = array_slice($recipes, 0, $count);
 
-        // Créer une nouvelle liste de recettes en base
-        $recipesList->setOwner($user);
+        // Créer une liste de recettes
+        $recipesList = new RecipesList();
+        $recipesList->setName("Liste générée le " . (new \DateTime())->format('d/m/Y H:i:s'));
 
-        // Ajouter les recettes sélectionnées à la liste
         foreach ($selectedRecipes as $recipe) {
-            $recipeList->addRecipe($recipe);
+            $recipesList->addRecipe($recipe);
         }
 
-        // Sauvegarder la liste en base
-        $entityManager->persist($recipeList);
+        $entityManager->persist($recipesList);
         $entityManager->flush();
 
-        // Retourner la liste en JSON
-        return new JsonResponse([
-            'message' => 'Liste générée avec succès',
-            'listId' => $recipeList->getId(),
-            'recipes' => array_map(fn($r) => ['id' => $r->getId()], $selectedRecipes)
-        ], 201);
+        // Retourner la liste des recettes
+        return new JsonResponse(
+            $serializer->serialize($recipesList, 'json', [
+                'groups' => ['getAllRecipesLists']
+            ]),
+            Response::HTTP_CREATED,
+            [],
+            true
+        );
     }
 
+
     /**
-     * Remplace une recette dans une liste par une autre sélectionnée
-     *
-     * @param int $listId
-     * @param int $oldRecipeId
-     * @param int $newRecipeId
-     * @return JsonResponse
+     * Vérifie si une catégorie est valide
      */
-    #[Route('/api/recipelist/{listId}/replace/{oldRecipeId}/{newRecipeId}', name: 'recipelist.replaceRecipe', methods: ['PUT'])]
-    public function replaceRecipeInList(
-        int $listId,
-        int $oldRecipeId,
-        int $newRecipeId,
-        RecipeListRepository $recipeListRepository,
-        RecipesRepository $recipesRepository,
-        EntityManagerInterface $entityManager
-    ): JsonResponse {
-        // Trouver la liste
-        $recipeList = $recipeListRepository->find($listId);
-        if (!$recipeList) {
-            return new JsonResponse(['error' => 'Liste non trouvée'], 404);
+    private function isCategoryValid(array $validCategories, string $categoryName): bool
+    {
+        foreach ($validCategories as $category) {
+            if ($category->getName() === $categoryName) {
+                return true;
+            }
         }
-
-        // Trouver les recettes
-        $oldRecipe = $recipesRepository->find($oldRecipeId);
-        $newRecipe = $recipesRepository->find($newRecipeId);
-
-        if (!$oldRecipe || !$newRecipe) {
-            return new JsonResponse(['error' => 'Une des recettes n\'existe pas'], 404);
-        }
-
-        // Vérifier si la recette à remplacer est bien dans la liste
-        if (!$recipeList->getRecipes()->contains($oldRecipe)) {
-            return new JsonResponse(['error' => 'La recette à remplacer n\'est pas dans la liste'], 400);
-        }
-
-        // Remplacer l'ancienne recette par la nouvelle
-        $recipeList->removeRecipe($oldRecipe);
-        $recipeList->addRecipe($newRecipe);
-
-        // Sauvegarde en base de données
-        $entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Recette remplacée avec succès dans la liste',
-            'oldRecipe' => ['id' => $oldRecipe->getId(), 'name' => $oldRecipe->getName()],
-            'newRecipe' => ['id' => $newRecipe->getId(), 'name' => $newRecipe->getName()]
-        ], 200);
+        return false;
     }
 
     /**

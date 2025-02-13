@@ -18,7 +18,7 @@ class Recipes
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups("getRecipes", "getAllRecipes", "getRecipesByCategorie")]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategorie'])]
     private string $name;
 
     #[ORM\Column]
@@ -26,7 +26,7 @@ class Recipes
     private ?int $cookingTime = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups("getRecipes", "getAllRecipes")]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes'])]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -57,6 +57,7 @@ class Recipes
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'recipes')]
+    #[Groups("getAllRecipes")]
     private Collection $categories;
 
     /**

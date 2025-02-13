@@ -24,7 +24,7 @@ class RecipesList
      * @var Collection<int, Recipes>
      */
     #[ORM\ManyToMany(targetEntity: Recipes::class, inversedBy: 'recipesLists')]
-    #[Groups("getAllRecipes", "getRecipesByCategorie", "getAllCategories", "getAllFoods")]
+    #[Groups(['getAllRecipesLists'])]
     private Collection $recipes;
 
     #[ORM\ManyToOne(inversedBy: 'recipesLists')]

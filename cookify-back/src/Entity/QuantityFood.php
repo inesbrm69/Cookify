@@ -27,8 +27,7 @@ class QuantityFood
     private ?Recipes $recipeId = null;
 
 
-    #[ORM\OneToOne(inversedBy: 'quantityFood', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Food::class)]
     private ?Food $foodId = null;
 
     public function getId(): ?int
