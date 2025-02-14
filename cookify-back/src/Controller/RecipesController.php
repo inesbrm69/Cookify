@@ -8,6 +8,7 @@ use App\Entity\QuantityFood;
 use App\Entity\Food;
 use App\Entity\User;
 use App\Entity\Image;
+use App\Entity\Category;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,8 +50,8 @@ final class RecipesController extends AbstractController
     }
 
     /**
-     * Crée une recette avec ses ingrédients, instructions, et images
-     */
+    * Crée une recette avec ses ingrédients, instructions, images et catégories
+    */
     #[Route('/api/recipes/create', name: 'create_recipe', methods: ['POST'])]
     public function createRecipe(
         Request $request,
@@ -74,7 +75,7 @@ final class RecipesController extends AbstractController
         }
 
         // Vérification des données obligatoires
-        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'isPublic', 'ingredients', 'instructions'];
+        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'isPublic', 'ingredients', 'instructions', 'categories'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field]) || empty($data[$field])) {
                 return new JsonResponse(['error' => "Le champ '$field' est manquant ou vide"], Response::HTTP_BAD_REQUEST);
@@ -91,6 +92,21 @@ final class RecipesController extends AbstractController
             ->setPreparationTime((int) $data['preparationTime'])
             ->setDifficulty($data['difficulty'])
             ->setIsPublic((bool) $data['isPublic']);
+
+        // Gestion des catégories
+        if (!is_array($data['categories']) || empty($data['categories'])) {
+            return new JsonResponse(['error' => 'Les catégories doivent être un tableau non vide'], Response::HTTP_BAD_REQUEST);
+        }
+
+        foreach ($data['categories'] as $categoryName) {
+            $category = $entityManager->getRepository(Category::class)->findOneBy(['name' => $categoryName]);
+            if (!$category) {
+                $category = new Category();
+                $category->setName($categoryName);
+                $entityManager->persist($category);
+            }
+            $recipe->addCategory($category);
+        }
 
         // Gestion de l'image
         $uploadedFile = $request->files->get('image');
