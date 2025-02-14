@@ -86,6 +86,10 @@ class Recipes
     #[ORM\ManyToMany(targetEntity: RecipesList::class, mappedBy: 'recipes')]
     private Collection $recipesLists;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups("getAllRecipes")]
+    private ?Image $image = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -329,6 +333,18 @@ class Recipes
         if ($this->recipesLists->removeElement($recipesList)) {
             $recipesList->removeRecipe($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -17,9 +17,9 @@ class AppFixtures extends Fixture
 {
     private UserPasswordHasherInterface $hasher;
 
-    public function __construct(UserPasswordHasherInterface $hasher)
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        $this->hasher = $hasher;
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
@@ -28,7 +28,8 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail('test@example.com');
         $user->setRoles(['ROLE_USER']);
-        $user->setPassword($this->hasher->hashPassword($user, 'password123'));
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
+        $user->setPassword($hashedPassword);
         $user->setName('John');
         $user->setLastName('Doe');
         $user->setUsername('johndoe');
