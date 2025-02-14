@@ -33,6 +33,11 @@ final class FoodController extends AbstractController
         SerializerInterface $serializer
         ): JsonResponse
     {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         $food =  $repository->findAll();
         $jsonFood = $serializer->serialize($categ, 'json',["groups" => "getAllFoods"]);
         return new JsonResponse(    

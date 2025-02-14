@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\RecipesRepository;
 use App\Repository\CategoryRepository;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,11 @@ final class CategoryController extends AbstractController
         CategoryRepository $repository,
         SerializerInterface $serializer
     ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         $categ = $repository->findAll();
         $jsonCateg = $serializer->serialize($categ, 'json', ["groups" => "getAllCategories"]);
         return new JsonResponse(
@@ -59,6 +65,11 @@ final class CategoryController extends AbstractController
         RecipesRepository $recipesRepository,
         SerializerInterface $serializer
     ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         // Récupérer la catégorie par son ID
         $category = $categoryRepository->find($id);
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\RecipesList;
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipesRepository;
 use App\Repository\RecipesListRepository;
@@ -29,6 +30,11 @@ final class RecipesListController extends AbstractController
 
     #[Route('/api/recipelist/{listId}', name: 'recipelist.get', methods: ['GET'])]
     public function getRecipeList(int $listId, RecipesListRepository $recipeListRepository): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         $recipeList = $recipeListRepository->find($listId);
         if (!$recipeList) {
             return new JsonResponse(['error' => 'Liste non trouvée'], 404);
@@ -54,6 +60,11 @@ final class RecipesListController extends AbstractController
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer
     ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         // Vérifier que le nombre demandé est valide
         if ($count <= 0) {
             return new JsonResponse(['error' => 'Le nombre de recettes doit être supérieur à 0'], Response::HTTP_BAD_REQUEST);
@@ -137,20 +148,6 @@ final class RecipesListController extends AbstractController
         );
     }
 
-
-    /**
-     * Vérifie si une catégorie est valide
-     */
-    private function isCategoryValid(array $validCategories, string $categoryName): bool
-    {
-        foreach ($validCategories as $category) {
-            if ($category->getName() === $categoryName) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Supprime une recette d'une liste sans la supprimer en base
      *
@@ -169,6 +166,11 @@ final class RecipesListController extends AbstractController
         RecipesRepository $recipesRepository,
         EntityManagerInterface $entityManager
     ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         // Récupérer la liste de recettes
         $recipeList = $recipeListRepository->find($listId);
         if (!$recipeList) {
@@ -214,6 +216,11 @@ final class RecipesListController extends AbstractController
         RecipesRepository $recipesRepository,
         EntityManagerInterface $entityManager
     ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         // Récupérer la liste de recettes
         $recipeList = $recipeListRepository->find($listId);
         if (!$recipeList) {
