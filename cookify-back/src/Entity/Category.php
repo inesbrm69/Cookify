@@ -24,7 +24,7 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups("getAllRecipes")]
+    #[Groups(["getAllRecipes", "getAllCategories"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]

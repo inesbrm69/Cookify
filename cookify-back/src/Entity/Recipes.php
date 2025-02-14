@@ -15,10 +15,11 @@ class Recipes
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategory'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategorie'])]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategory'])]
     private string $name;
 
     #[ORM\Column]
@@ -26,7 +27,7 @@ class Recipes
     private ?int $cookingTime = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes'])]
+    #[Groups(['getAllRecipesLists', 'getAllRecipes', 'getRecipes', 'getRecipesByCategory'])]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -84,6 +85,10 @@ class Recipes
      */
     #[ORM\ManyToMany(targetEntity: RecipesList::class, mappedBy: 'recipes')]
     private Collection $recipesLists;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Groups("getAllRecipes")]
+    private ?Image $image = null;
 
     public function __construct()
     {
@@ -328,6 +333,18 @@ class Recipes
         if ($this->recipesLists->removeElement($recipesList)) {
             $recipesList->removeRecipe($this);
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function setImage(?Image $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -21,6 +21,11 @@ final class QuantityFoodController extends AbstractController
 
     #[Route('/api/quantityfood/recipe/{recipeId}', name: 'quantityfood.getByRecipe', methods: ['GET'])]
     public function getQuantitiesByRecipe(int $recipeId, RecipesRepository $recipesRepository): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         $recipe = $recipesRepository->find($recipeId);
         if (!$recipe) {
             return new JsonResponse(['error' => 'Recette non trouvée'], 404);
@@ -41,6 +46,11 @@ final class QuantityFoodController extends AbstractController
 
     #[Route('/api/quantityfood/delete/{quantityId}', name: 'quantityfood.delete', methods: ['DELETE'])]
     public function deleteQuantity(int $quantityId, EntityManagerInterface $entityManager, QuantityFoodRepository $quantityFoodRepository): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
         $quantityFood = $quantityFoodRepository->find($quantityId);
         if (!$quantityFood) {
             return new JsonResponse(['error' => 'Quantité non trouvée'], 404);

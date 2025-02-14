@@ -14,6 +14,7 @@ class RecipesList
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getAllRecipesLists'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: false)]
