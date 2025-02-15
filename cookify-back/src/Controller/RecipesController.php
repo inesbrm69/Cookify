@@ -75,7 +75,7 @@ final class RecipesController extends AbstractController
         }
 
         // Vérification des données obligatoires
-        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'isPublic', 'ingredients', 'instructions', 'categories'];
+        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'ingredients', 'instructions', 'categories'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field]) || empty($data[$field])) {
                 return new JsonResponse(['error' => "Le champ '$field' est manquant ou vide"], Response::HTTP_BAD_REQUEST);
