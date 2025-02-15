@@ -29,6 +29,13 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import {MatOption, MatSelect, MatSelectTrigger} from "@angular/material/select";
+import {MatChipGrid, MatChipInput, MatChipRow, MatChipsModule} from "@angular/material/chips";
+import {MatGridList} from "@angular/material/grid-list";
+import {MatRow} from "@angular/material/table";
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import {DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter} from "@angular/material/core";
+import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 
 @NgModule({
   declarations: [
@@ -69,10 +76,26 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatSlideToggle,
     MatError,
     MatLabel,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    MatSelect,
+    MatSelectTrigger,
+    MatOption,
+    MatChipGrid,
+    MatChipRow,
+    MatChipInput,
+    MatChipsModule,
+    MatGridList,
+    MatRow,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatDatepicker,
+    MatSlider,
+    MatSliderThumb
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    { provide: DateAdapter, useClass: NativeDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: { parse: { dateInput: 'YYYY-MM-DD' }, display: { dateInput: 'YYYY-MM-DD' } } }
   ],
   bootstrap: [AppComponent]
 })

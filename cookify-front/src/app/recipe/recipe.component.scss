@@ -9,9 +9,9 @@
 
 .content{
   display: flex;
-  flex-direction: column;
-  //flex-direction: row;
-  //flex-wrap: wrap;
+  //flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
   gap: 10px 10px;

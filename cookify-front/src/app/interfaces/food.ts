@@ -1,7 +1,7 @@
 import {QuantityFood} from "./quantity-food";
 //Ingredient
 export interface Food {
-  Id : number,
-  Name : string,
-  QuantityFood : QuantityFood
+  //Id : number,
+  name : string,
+  quantityFood? : QuantityFood
 }

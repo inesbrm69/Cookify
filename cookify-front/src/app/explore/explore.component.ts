@@ -13,6 +13,7 @@ import {RecipeComponent} from "../recipe/recipe.component";
 export class ExploreComponent implements OnInit {
   isLoading: boolean = false;
   recipes: Recipes[] = [];
+  apiUrlPublic: string = "http://localhost:8000/uploads/images/";
 
   constructor(private recipeService: RecipesService, private router: Router) {
   }
@@ -22,9 +23,7 @@ export class ExploreComponent implements OnInit {
       next: (data) => {this.recipes = data;},
       error: (error) => {
         if(error.status == 401){
-          this.router.navigateByUrl('/login').then(() => {
-            window.location.reload();
-          });
+          this.router.navigateByUrl('/login');
         }else{
           console.error('Error while getting recipes:', error);
         }

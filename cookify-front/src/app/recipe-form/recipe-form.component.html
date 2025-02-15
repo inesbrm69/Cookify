@@ -26,7 +26,7 @@
 
       <div>
         <mat-form-field appearance="fill">
-          <mat-label>Temps de cuisson</mat-label>
+          <mat-label>Temps de cuisson (minutes)</mat-label>
           <input matInput formControlName="cookingTime" required/>
           <mat-error *ngIf="newRecipeForm.controls['cookingTime'].hasError('required')">
             Le temps de cuisson est requis.
@@ -59,8 +59,8 @@
 
       <div>
         <mat-form-field appearance="fill">
-          <mat-label>Quantité</mat-label>
-          <input matInput type="number" formControlName="quantity" required />
+          <mat-label>Quantité (nb de personnes)</mat-label>
+          <input matInput formControlName="quantity" required />
           <mat-error *ngIf="newRecipeForm.controls['quantity'].hasError('required')">
             La quantité est requise.
           </mat-error>
@@ -72,7 +72,7 @@
 
       <div>
         <mat-form-field appearance="fill">
-          <mat-label>Temps de préparatiion</mat-label>
+          <mat-label>Temps de préparatiion (minutes)</mat-label>
           <input matInput formControlName="preparationTime" required />
           <mat-error *ngIf="newRecipeForm.controls['preparationTime'].hasError('required')">
             Le temps de préparation est requis.
@@ -96,35 +96,96 @@
       <div>
         <mat-form-field appearance="fill">
           <mat-label>Difficulté</mat-label>
-          <input matInput formControlName="difficulty" required />
+          <mat-select formControlName="difficulty" required>
+            <mat-option *ngFor="let difficulty of difficultyList" [value]="difficulty">
+              {{ difficulty }}
+            </mat-option>
+          </mat-select>
           <mat-error *ngIf="newRecipeForm.controls['difficulty'].hasError('required')">
             La difficulté est requise.
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div>
-        <mat-form-field appearance="fill">
-          <mat-label>Image </mat-label>
-          <br>
-          <mat-icon>folder</mat-icon>
-          <ngx-mat-file-input multiple="false" (change)="onFileSelected($event)" accept="image/*" formControlName="image" required>
-          </ngx-mat-file-input>
-          <mat-error *ngIf="newRecipeForm.controls['image'].hasError('required')">
-            Une image est requise.
-          </mat-error>
-        </mat-form-field>
-        <img *ngIf="imagePreview" [src]="imagePreview" alt="Aperçu de l'image" width="100">
-      </div>
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Categories</mat-label>
+            <mat-select formControlName="categories" multiple>
+              <mat-option *ngFor="let category of categoriesList" [value]="category.name">
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-      <mat-slide-toggle formControlName="isPublic">Est public</mat-slide-toggle>
+        <div class="img-form">
+          <mat-form-field appearance="fill">
+            <mat-label>Image </mat-label>
+            <br>
+            <mat-icon>folder</mat-icon>
+            <ngx-mat-file-input multiple="false" (change)="onFileSelected($event)" accept="image/*" formControlName="image" required>
+            </ngx-mat-file-input>
+            <mat-error *ngIf="newRecipeForm.controls['image'].hasError('required')">
+              Une image est requise.
+            </mat-error>
+          </mat-form-field>
+          <div *ngIf="imagePreview">
+            <p>Aperçu de l'image sélectionnée :</p>
+            <img [src]="imagePreview" alt="Aperçu de l'image" width="100">
+          </div>
+        </div>
+
+
+        <div>
+
+        <div class="form" formArrayName="ingredients">
+          <p>Ingredients :</p>
+          <div class="form-fields" *ngFor="let input of inputs.controls; let i = index" [formGroupName]="i">
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Ingredient</mat-label>
+                <input matInput formControlName="name" required />
+                <mat-error *ngIf="input.get('name')?.hasError('required')">
+                  Au moins un ingredient est requis.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Unité</mat-label>
+                <input matInput formControlName="unity" required />
+                <mat-error *ngIf="input.get('unity')?.hasError('required')">
+                  Une unité est requise.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Quantité</mat-label>
+                <input matInput formControlName="quantity" required />
+                <mat-error *ngIf="input.get('quantity')?.hasError('required')">
+                  La quantité est requise.
+                </mat-error>
+                <mat-error *ngIf="input.get('quantity')?.hasError('pattern')">
+                  Veuillez entrer un nombre valide.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <button type="button" (click)="removeInput(i)" *ngIf="inputs.length > 1">Supprimer</button>
+          </div>
+        </div>
+        <button type="button" (click)="addInput()">Ajouter une ligne</button>
+</div>
+
+
 
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
 
       </div>
-      <div>
+      <div class="form-fields">
+        <mat-slide-toggle formControlName="isPublic">Est public</mat-slide-toggle>
         <button mat-raised-button color="success" type="submit" [disabled]="newRecipeForm.invalid">Créer</button>
       </div>
     </form>

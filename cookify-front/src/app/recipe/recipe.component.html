@@ -7,18 +7,21 @@
     </mat-dialog-actions>
   </div>
 
-  <img mat-dialog-title src="assets/{{data.recipe.Image.url}}" alt="">
-  <mat-dialog-content>
-    <h2 mat-dialog-title>{{data.recipe.Name}}</h2>
-    {{data.recipe.Description}}
+  <div class="content">
+    <img *ngIf="recipe.image" mat-dialog-title src="{{apiUrlPublic}}{{recipe.image.name}}" alt="">
+    <mat-dialog-content>
+      <h2 mat-dialog-title>{{recipe.name}}</h2>
+      <p>{{recipe.description}}</p>
+      <p>Temps de cuisson : {{recipe.cookingTime}}</p>
+      <p>Calories : {{recipe.calories}}</p>
+      <p>Quantité : {{recipe.quantity}}</p>
+      <p>Temps de préparation : {{recipe.preparationTime}}</p>
+      <p>Difficulté : {{recipe.difficulty}}</p>
+      <p>Étapes :</p>
+      <p [style.white-space]="'pre-line'">{{recipe.instructions}}</p>
+    </mat-dialog-content>
+  </div>
 
-    Temps de cuisson : {{data.recipe.CookingTime}}
-    Calories : {{data.recipe.Calories}}
-    Quantité : {{data.recipe.Quantity}}
-    Temps de préparation : {{data.recipe.PreparationTime}}
-    Difficulté : {{data.recipe.Difficulty}}
-    {{data.recipe.Instructions}}
-  </mat-dialog-content>
 
 </div>
 

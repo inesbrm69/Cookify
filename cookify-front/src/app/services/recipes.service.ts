@@ -7,16 +7,20 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class RecipesService {
-  private jsonRecipes = 'assets/fakedata/Recipes.json';
   private apiUrl = 'http://localhost:8000/';
 
   constructor(private http: HttpClient) { }
 
   getRecipes(): Observable<Recipes[]>{
-    return this.http.get<Recipes[]>(this.jsonRecipes);
+    return this.http.get<Recipes[]>(this.apiUrl+'api/recipes', { withCredentials: true });
   }
-//Todo : voir si on utilise le jwt
+
   new(recipe: Recipes): Observable<Recipes> {
-    return this.http.post<Recipes>(this.apiUrl+'create/recipe', recipe, { withCredentials: true });
+    const requestData = JSON.stringify(recipe);
+    const formData = new FormData();
+    formData.append('data', requestData);
+    formData.append('image', recipe.image);
+    console.log('FormData contenu :', formData.get('data'));
+    return this.http.post<Recipes>(this.apiUrl+'api/recipes/create', formData, { withCredentials: true });
   }
 }
