@@ -1,0 +1,152 @@
+[
+  {
+    "Id": 1,
+    "Quantity": 200,
+    "Unity": "g",
+    "Recipes": {
+      "Id": 1,
+      "Name": "Chocolate Cake",
+      "CookingTime": 45,
+      "Calories": 350,
+      "Quantity": 4,
+      "PreparationTime": 30,
+      "Instructions": "Mix ingredients, bake for 45 minutes.",
+      "Difficulty": "Medium",
+      "IsPublic": true,
+      "Image": {
+        "id": 1,
+        "recipeId": 1,
+        "url": "image1.jpg"
+      }
+    },
+    "Food": {
+      "Id": 1,
+      "Name": "Sugar"
+    }
+  },
+  {
+    "Id": 2,
+    "Quantity": 300,
+    "Unity": "g",
+    "Recipes": {
+      "Id": 2,
+      "Name": "Spaghetti Bolognese",
+      "CookingTime": 60,
+      "Calories": 500,
+      "Quantity": 4,
+      "PreparationTime": 20,
+      "Instructions": "Cook pasta, prepare sauce, combine.",
+      "Difficulty": "Medium",
+      "IsPublic": true,
+      "Image": {
+        "id": 2,
+        "recipeId": 2,
+        "url": "image2.jpg"
+      }
+    },
+    "Food": {
+      "Id": 2,
+      "Name": "Flour"
+    }
+  },
+  {
+    "Id": 3,
+    "Quantity": 100,
+    "Unity": "g",
+    "Recipes": {
+      "Id": 3,
+      "Name": "Caesar Salad",
+      "CookingTime": 15,
+      "Calories": 250,
+      "Quantity": 2,
+      "PreparationTime": 10,
+      "Instructions": "Toss lettuce, croutons, and dressing.",
+      "Difficulty": "Easy",
+      "IsPublic": true,
+      "Image": {
+        "id": 3,
+        "recipeId": 3,
+        "url": "image3.jpg"
+      }
+    },
+    "Food": {
+      "Id": 3,
+      "Name": "Lettuce"
+    }
+  },
+  {
+    "Id": 4,
+    "Quantity": 150,
+    "Unity": "g",
+    "Recipes": {
+      "Id": 4,
+      "Name": "Avocado Toast",
+      "CookingTime": 10,
+      "Calories": 200,
+      "Quantity": 1,
+      "PreparationTime": 5,
+      "Instructions": "Mash avocado, spread on toast.",
+      "Difficulty": "Easy",
+      "IsPublic": true,
+      "Image": {
+        "id": 4,
+        "recipeId": 4,
+        "url": "image4.jpg"
+      }
+    },
+    "Food": {
+      "Id": 4,
+      "Name": "Avocado"
+    }
+  },
+  {
+    "Id": 5,
+    "Quantity": 4,
+    "Unity": "units",
+    "Recipes": {
+      "Id": 5,
+      "Name": "Pancakes",
+      "CookingTime": 20,
+      "Calories": 300,
+      "Quantity": 3,
+      "PreparationTime": 10,
+      "Instructions": "Mix batter, cook pancakes.",
+      "Difficulty": "Medium",
+      "IsPublic": true,
+      "Image": {
+        "id": 5,
+        "recipeId": 5,
+        "url": "image5.jpg"
+      }
+    },
+    "Food": {
+      "Id": 5,
+      "Name": "Eggs"
+    }
+  },
+  {
+    "Id": 6,
+    "Quantity": 1,
+    "Unity": "unit",
+    "Recipes": {
+      "Id": 6,
+      "Name": "Smoothie",
+      "CookingTime": 5,
+      "Calories": 150,
+      "Quantity": 2,
+      "PreparationTime": 5,
+      "Instructions": "Blend fruits and yogurt.",
+      "Difficulty": "Easy",
+      "IsPublic": true,
+      "Image": {
+        "id": 6,
+        "recipeId": 6,
+        "url": "image6.jpg"
+      }
+    },
+    "Food": {
+      "Id": 6,
+      "Name": "Banana"
+    }
+  }
+]

@@ -45,7 +45,8 @@ final class SecurityController extends AbstractController
         // Créer un nouvel utilisateur
         $user = new User();
         $user->setUsername($data['username']);
-
+        $user->setName($data['name']);
+        $user->setLastName($data['lastName']);
         // Hasher le mot de passe
         $hashedPassword = $passwordHasher->hashPassword($user, $data['password']);
         $user->setPassword($hashedPassword);

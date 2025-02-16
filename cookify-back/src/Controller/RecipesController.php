@@ -50,6 +50,34 @@ final class RecipesController extends AbstractController
     }
 
     /**
+     * Renvoie une recette par son ID
+     */
+    #[Route('/api/recipes/{id}', name: 'recipe.getById', methods: ['GET'])]
+    public function getRecipeById(
+        int $id,
+        RecipesRepository $repository,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        // Vérifier si l'utilisateur est authentifié
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
+        // Récupérer la recette par ID
+        $recipe = $repository->find($id);
+
+        // Vérifier si la recette existe
+        if (!$recipe) {
+            return new JsonResponse(['error' => 'Recette non trouvée'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Sérialiser et retourner la réponse JSON
+        $jsonRecipe = $serializer->serialize($recipe, 'json', ["groups" => "getAllRecipes"]);
+        return new JsonResponse($jsonRecipe, Response::HTTP_OK, [], true);
+    }
+
+    /**
     * Crée une recette avec ses ingrédients, instructions, images et catégories
     */
     #[Route('/api/recipes/create', name: 'create_recipe', methods: ['POST'])]
@@ -75,7 +103,7 @@ final class RecipesController extends AbstractController
         }
 
         // Vérification des données obligatoires
-        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'isPublic', 'ingredients', 'instructions', 'categories'];
+        $requiredFields = ['name', 'cookingTime', 'description', 'calories', 'quantity', 'preparationTime', 'difficulty', 'ingredients', 'instructions', 'categories'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field]) || empty($data[$field])) {
                 return new JsonResponse(['error' => "Le champ '$field' est manquant ou vide"], Response::HTTP_BAD_REQUEST);

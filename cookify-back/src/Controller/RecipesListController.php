@@ -9,6 +9,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\RecipesRepository;
 use App\Repository\RecipesListRepository;
 use App\Repository\PreferencesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -103,10 +104,17 @@ final class RecipesListController extends AbstractController
             if (!$allergyPreference) {
                 return new JsonResponse(['error' => 'L\'allergie spécifiée n\'existe pas'], Response::HTTP_BAD_REQUEST);
             }
-            $recipesByAllergy = $recipesRepository->findByAllergy($allergy);
+
+            $recipesByAllergy = new ArrayCollection($recipesRepository->findByAllergy($allergy));
 
             // Fusionner les recettes si `diet` est aussi fourni
-            $recipes = $diet ? array_intersect($recipes, $recipesByAllergy) : $recipesByAllergy;
+            if ($diet) {
+                $recipes = (new ArrayCollection($recipes))
+                    ->filter(fn($recipe) => $recipesByAllergy->contains($recipe))
+                    ->toArray();
+            } else {
+                $recipes = $recipesByAllergy->toArray();
+            }
         }
 
         // Vérifier qu'il y a des recettes disponibles

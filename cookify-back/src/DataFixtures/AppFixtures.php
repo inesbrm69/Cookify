@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Food;
@@ -36,11 +37,20 @@ class AppFixtures extends Fixture
         $manager->persist($user);
 
         // Ajouter des catégories (name obligatoire)
-        $categoryNames = ['Entrée', 'Plat', 'Dessert', 'Végétarien', 'Vegan'];
+        $categoryNames = ['Entrée', 'Plat', 'Dessert', 'Végétarien', 'Vegan', 'Omnivore', 'Aucune', 'Gluten', 'Lactose'];
+        $diet = ['Végétarien', 'Vegan', 'Omnivore'];
+        $allergy = ['Aucune', 'Gluten', 'Lactose'];
         $categories = [];
         foreach ($categoryNames as $name) {
             $category = new Category();
             $category->setName($name);
+            if(in_array($name, $diet)) {
+                $category->setType("diet");
+            } else if(in_array($name, $allergy)){
+                $category->setType("allergy");
+            } else{
+                $category->setType("course");
+            }
             $manager->persist($category);
             $categories[] = $category;
         }
@@ -68,6 +78,18 @@ class AppFixtures extends Fixture
             'Mousse au chocolat'
         ];
 
+        $recipesImages[] = [];
+        foreach ($recipeNames as $name) {
+            $recipesImage = new Image();
+            $newFilename = $name . '.' . 'jpg';
+            $recipesImage->setName($newFilename);
+            $recipesImage->setPath('/uploads/images/' . $newFilename);
+            $recipesImage->setUploadedAt(new \DateTime());
+            $manager->persist($recipesImage);
+            $recipesImages[] = $recipesImage;
+        }
+
+
         $recipeInstructions = [
             "1. Faire cuire les pâtes\n2. Mélanger la crème et les œufs\n3. Ajouter aux pâtes et servir",
             "1. Préparer la laitue\n2. Ajouter le poulet grillé, les croûtons et la sauce César\n3. Mélanger et servir",
@@ -83,6 +105,7 @@ class AppFixtures extends Fixture
 
         // Créer les recettes avec leurs données
         $recipes = [];
+        $indexImg = 1;
         foreach ($recipeNames as $index => $name) {
             $recipe = new Recipes();
             $recipe->setName($name);
@@ -94,10 +117,163 @@ class AppFixtures extends Fixture
             $recipe->setDifficulty(['Facile', 'Moyen', 'Difficile'][rand(0, 2)]); 
             $recipe->setIsPublic(true);
             $recipe->setCreatedBy($user);
-            
+            $recipe->setImage($recipesImages[$indexImg]);
+            $indexImg++;
+            $categoryNames = ['Entrée', 'Plat', 'Dessert', 'Végétarien', 'Vegan', 'Omnivore', 'Aucune', 'Gluten', 'Lactose'];
+
+            switch ($name) {
+                case 'Pâtes Carbonara':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Salade César':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Entrée';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Soupe à l’oignon':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Entrée';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Tarte au citron':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Dessert';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Gluten';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Gratin dauphinois':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Lasagnes bolognaises':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Pizza Margherita':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Ratatouille':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Végétarien';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Vegan';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Aucune';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Bœuf Bourguignon':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Plat';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Aucune';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+                case 'Mousse au chocolat':
+                    $dish = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Dessert';
+                    });
+                    $recipe->addCategory(reset($dish));
+                    $diet = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Omnivore';
+                    });
+                    $recipe->addCategory(reset($diet));
+                    $allergy = array_filter($categories, function ($category) {
+                        return $category->getName() == 'Lactose';
+                    });
+                    $recipe->addCategory(reset($allergy));
+                    break;
+            }
             // Ajout d'une ou plusieurs catégories
             for ($i = 0; $i < rand(1, 2); $i++) {
-                $recipe->addCategory($categories[array_rand($categories)]);
+                //$recipe->addCategory($categories[array_rand($categories)]);
             }
             
             $recipe->setInstructions($recipeInstructions[$index]); 

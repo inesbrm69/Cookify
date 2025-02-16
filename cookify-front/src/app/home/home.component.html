@@ -3,18 +3,59 @@
 <div class="container">
 
   <h3>Bonjour !</h3>
-  <p>Combien de repas voulez-vous préparer ?</p>
-  <div class="content">
-    <button mat-icon-button aria-label="Moins" (click)="decrement()">
-      <mat-icon>remove</mat-icon>
-    </button>
-  <div class="number-display">
-    {{counter}}
-  </div>
-    <button mat-icon-button aria-label="Plus" (click)="increment()">
-      <mat-icon>add</mat-icon>
-    </button>
-  <button mat-raised-button color="warn"> C'est parti ! </button>
-  </div>
-  <div class="nav-bar"></div>
+
+
+  <form [formGroup]="recipeListForm" (ngSubmit)="onSubmit()">
+
+    <div class="filters">
+      <mat-form-field appearance="fill">
+        <mat-label>Diet</mat-label>
+        <mat-select formControlName="diet">
+          <mat-option *ngFor="let diet of dietList" [value]="diet">
+            {{ diet }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="recipeListForm.controls['diet'].hasError('required')">
+          Le type de diet est requis.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Allergies</mat-label>
+        <mat-select formControlName="allergy">
+          <mat-option *ngFor="let allergy of allergyList" [value]="allergy">
+            {{ allergy }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="recipeListForm.controls['allergy'].hasError('required')">
+          Le type d'allergies est requis.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <p>Combien de repas voulez-vous préparer ?</p>
+    <div class="content">
+      <button mat-icon-button type="button" aria-label="Moins" (click)="decrement()">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <mat-form-field appearance="fill" class="fromFieldMealQuantity">
+
+        <input matInput formControlName="mealQuantity" required />
+
+        <mat-error *ngIf="recipeListForm.controls['mealQuantity'].hasError('required')">
+          Le nombre de repas est requis.
+        </mat-error>
+        <mat-error *ngIf="recipeListForm.controls['mealQuantity'].hasError('pattern')">
+          Veuillez entrer un nombre valide.
+        </mat-error>
+      </mat-form-field>
+      <button mat-icon-button type="button" aria-label="Plus" (click)="increment()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-raised-button color="warn" type="submit" [disabled]="recipeListForm.invalid"> C'est parti ! </button>
+
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </form>
 </div>

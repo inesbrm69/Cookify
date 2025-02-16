@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="actions">
+    <mat-dialog-actions>
+      <button mat-icon-button color="warn" mat-dialog-close aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-dialog-actions>
+  </div>
+
+  <div class="content">
+    <img *ngIf="recipe.image" mat-dialog-title src="{{apiUrlPublic}}{{recipe.image.name}}" alt="">
+    <mat-dialog-content>
+      <h2 mat-dialog-title>{{recipe.name}}</h2>
+      <p>{{recipe.description}}</p>
+      <p>Temps de cuisson : {{recipe.cookingTime | timeFormat}}</p>
+      <p>Calories : {{recipe.calories}}</p>
+      <p>Quantité : {{recipe.quantity}}</p>
+      <p>Temps de préparation : {{recipe.preparationTime | timeFormat}}</p>
+      <p>Difficulté : {{recipe.difficulty}}</p>
+      <p>Étapes :</p>
+      <p [style.white-space]="'pre-line'">{{recipe.instructions}}</p>
+    </mat-dialog-content>
+  </div>
+
+
+</div>
+
