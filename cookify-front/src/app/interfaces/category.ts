@@ -3,5 +3,6 @@ import {Recipes} from "./recipes";
 export interface Category {
   Id : number,
   name : string,
+  type : string,
   recipes : Recipes[]
 }

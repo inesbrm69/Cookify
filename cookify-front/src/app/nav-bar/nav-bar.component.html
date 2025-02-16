@@ -3,10 +3,10 @@
     <a mat-button color="warn" title="Accueil" [routerLink]="['/accueil']">
         Cookify
     </a>
+    <mat-divider class="custom-divider" vertical></mat-divider>
     <a mat-button title="Explorer" [routerLink]="['/explorer']">
         Explorer
     </a>
-
   </div>
   <div class="content">
     <button mat-icon-button color="warn" aria-label="Add" (click)="openDialog()">
@@ -18,5 +18,5 @@
     <button mat-raised-button color="warn" (click)="logout()">
       <mat-icon>logout</mat-icon>
     </button>
-    <div>
+  </div>
 </div>

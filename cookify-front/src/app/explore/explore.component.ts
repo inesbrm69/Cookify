@@ -20,7 +20,11 @@ export class ExploreComponent implements OnInit {
 
   ngOnInit(): void {
     this.recipeService.getRecipes().subscribe({
-      next: (data) => {this.recipes = data;},
+      next: (data) => {
+        this.recipes = data.filter(recipe=> {
+                return recipe.isPublic
+              });
+        },
       error: (error) => {
         if(error.status == 401){
           this.router.navigateByUrl('/login');

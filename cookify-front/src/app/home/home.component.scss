@@ -8,13 +8,17 @@
 }
 
 .content{
+  background-color: aliceblue;
+  padding: 5px 0 5px 0;
+}
+
+.filters,  .content{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
   gap: 10px 10px;
-  background-color: aliceblue;
   border-radius: 30px;
 }
 
@@ -25,7 +29,7 @@ button{
   font-size: 16pt;
 }
 
-.number-display{
-  font-size: 16pt;
-}
 
+.fromFieldMealQuantity{
+  width: 50px;
+}

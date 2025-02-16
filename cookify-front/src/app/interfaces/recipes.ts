@@ -3,7 +3,7 @@ import {Category} from "./category";
 import {QuantityFood} from "./quantity-food";
 
 export interface Recipes {
-  //Id : number,
+  id? : number,
   name : string
   cookingTime : number
   description? : string,

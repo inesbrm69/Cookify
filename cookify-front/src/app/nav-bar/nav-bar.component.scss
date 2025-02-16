@@ -26,5 +26,11 @@ a{
   justify-content: space-evenly;
   gap: 10px 50px;
   background-color: inherit;
+  padding-right: 10px;
 }
 
+.custom-divider {
+  border-color: black !important;
+  height: 50px;
+  opacity: 1;
+}

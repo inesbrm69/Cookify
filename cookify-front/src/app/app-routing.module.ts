@@ -5,6 +5,7 @@ import {ExploreComponent} from "./explore/explore.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
+import {RecipeListComponent} from "./recipe-list/recipe-list.component";
 
 const routes: Routes = [
   {
