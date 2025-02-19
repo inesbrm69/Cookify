@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
-import {MatIconModule} from '@angular/material/icon'
+import {Component, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {RecipesService} from "../services/recipes.service";
-import {Recipes} from "../interfaces/recipes";
 import {Preferences} from "../interfaces/preferences";
 import {Router} from "@angular/router";
-import {CategoryService} from "../services/category.service";
-import {Category} from "../interfaces/category";
 import {MatDialog} from "@angular/material/dialog";
 import {RecipeListComponent} from "../recipe-list/recipe-list.component";
 @Component({
@@ -48,6 +44,8 @@ export class HomeComponent {
           if (response && response.id !== undefined) {
             this.dialog.open(RecipeListComponent, {
               data: { idList: response.id },
+              height: '70%',
+              width: '70%'
             });
           } else {
             console.warn("La réponse ne contient pas d'ID.");
@@ -63,6 +61,4 @@ export class HomeComponent {
       console.log('Invalid form');
     }
   }
-
-
 }

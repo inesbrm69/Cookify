@@ -39,6 +39,8 @@ export class RecipeListComponent {
             data: {
               recipe: data,
             },
+            height: '70%',
+            width: '70%'
           });
         },
         error: (error) => {
@@ -56,7 +58,8 @@ export class RecipeListComponent {
         idList: this.data.idList,
         idOldRecipe: recipeId
       },
-      height: '70%'
+      height: '70%',
+      width: '70%'
     });
 
     dialogRef.afterClosed().subscribe(result => {
