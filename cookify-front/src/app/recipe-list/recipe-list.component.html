@@ -24,6 +24,14 @@
             </button>
           </mat-card-content>
         </ng-template>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" aria-label="Replace" (click)="replace(recipe.id)">
+            Remplacer
+          </button>
+          <button mat-raised-button color="warn" aria-label="Delete" (click)="delete(recipe.id)">
+            Supprimer
+          </button>
+        </mat-card-actions>
       </mat-card>
     </div>
       </mat-dialog-content>

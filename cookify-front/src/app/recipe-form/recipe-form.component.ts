@@ -63,7 +63,11 @@ export class RecipeFormComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           this.dialogRef.close();
-          this.router.navigateByUrl('/explorer');
+          if(this.router.url === '/explorer'){
+            window.location.reload();
+          }else{
+            this.router.navigateByUrl('/explorer');
+          }
         },
         error: (error) => {
           this.isLoading = false;

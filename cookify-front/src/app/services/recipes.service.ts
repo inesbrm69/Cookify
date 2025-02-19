@@ -36,4 +36,12 @@ export class RecipesService {
   getRecipeList(idList: number): Observable<any>{
     return this.http.get<any>(this.apiUrl+'api/recipelist/'+idList, { withCredentials: true });
   }
+
+  replaceRecipeInList(idList: number, idOldRecipe: number, idNewRecipe: number): Observable<any>{
+    return this.http.put<any>(this.apiUrl+'api/recipelist/'+idList+'/update/'+idOldRecipe+'/with/'+idNewRecipe, {}, { withCredentials: true });
+  }
+
+  deleteRecipeInList(idList: number, idRecipe: number): Observable<any>{
+    return this.http.delete<any>(this.apiUrl+'api/recipelist/'+idList+'/remove/'+idRecipe, { withCredentials: true });
+  }
 }

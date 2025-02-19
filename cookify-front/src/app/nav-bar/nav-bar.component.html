@@ -4,18 +4,15 @@
         Cookify
     </a>
     <mat-divider class="custom-divider" vertical></mat-divider>
-    <a mat-button title="Explorer" [routerLink]="['/explorer']">
+    <a mat-button title="Explorer la liste de recettes" [routerLink]="['/explorer']">
         Explorer
     </a>
   </div>
   <div class="content">
-    <button mat-icon-button color="warn" aria-label="Add" (click)="openDialog()">
+    <button mat-icon-button color="warn" aria-label="Add" title="Créer une recette" (click)="openDialog()">
       <mat-icon>add</mat-icon>
     </button>
-    <a mat-icon-button title="Profil" [routerLink]="['/profil']">
-      <mat-icon>person</mat-icon>
-    </a>
-    <button mat-raised-button color="warn" (click)="logout()">
+    <button mat-raised-button color="warn" title="Se déconnecter" (click)="logout()">
       <mat-icon>logout</mat-icon>
     </button>
   </div>

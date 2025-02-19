@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, Injector, OnInit} from '@angular/core';
 import {Recipes} from "../interfaces/recipes";
 import {RecipesService} from "../services/recipes.service";
 import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {RecipeComponent} from "../recipe/recipe.component";
 
 @Component({
@@ -14,8 +14,16 @@ export class ExploreComponent implements OnInit {
   isLoading: boolean = false;
   recipes: Recipes[] = [];
   apiUrlPublic: string = "http://localhost:8000/uploads/images/";
+  isRecipeListMode: boolean = false;
+  private dialogRef? : null  |  MatDialogRef<ExploreComponent> = null;
+  private  dialogData;
+  constructor(private recipeService: RecipesService, private router: Router, private injector: Injector) {
+    this.dialogRef = this.injector.get(MatDialogRef, null);
+    this.dialogData = this.injector.get(MAT_DIALOG_DATA, null);
 
-  constructor(private recipeService: RecipesService, private router: Router) {
+    if(this.dialogRef != null && this.dialogData !=  null){
+      this.isRecipeListMode = true;
+    }
   }
 
   ngOnInit(): void {
@@ -43,5 +51,22 @@ export class ExploreComponent implements OnInit {
         recipe: recipe,
       },
     });
+  }
+
+  replace(newRecipeId?: number){
+    if(this.dialogRef != null && this.dialogData !=  null && newRecipeId != null){
+      let idList = this.dialogData.idList;
+      let idOldRecipe = this.dialogData.idOldRecipe;
+
+      this.recipeService.replaceRecipeInList(idList, idOldRecipe, newRecipeId).subscribe({
+        next: (data) => {
+          this.dialogRef?.close();
+
+        },
+        error: (error) => {
+            console.error('Error while replacing recipe:', error);
+        }
+      });
+    }
   }
 }

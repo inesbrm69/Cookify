@@ -28,7 +28,7 @@ class RecipesRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->join('r.categories', 'c')
-            ->where('c.name = :allergy')
+            ->where('c.name != :allergy')
             ->setParameter('allergy', $allergy)
             ->getQuery()
             ->getResult();
