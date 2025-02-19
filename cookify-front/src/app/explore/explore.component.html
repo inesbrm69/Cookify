@@ -1,6 +1,8 @@
-<app-nav-bar></app-nav-bar>
 
 <div class="container">
+  <button *ngIf="isRecipeListMode" mat-icon-button color="warn" mat-dialog-close aria-label="Close">
+    <mat-icon>close</mat-icon>
+  </button>
     <div class="content">
       <div *ngIf="recipes.length > 0; else noRecipes" class="content">
         <mat-card *ngFor="let recipe of recipes" appearance="outlined">
@@ -18,8 +20,7 @@
             </mat-card-content>
           </ng-template>
           <mat-card-actions>
-            <button mat-icon-button color="warn" aria-label="Add">
-              <!--ajouter un oonClick-->
+            <button *ngIf="isRecipeListMode" mat-icon-button color="warn" aria-label="Add" (click)="replace(recipe.id)">
               <mat-icon>add</mat-icon>
             </button>
           </mat-card-actions>

@@ -44,7 +44,16 @@ final class RecipesListController extends AbstractController
         return new JsonResponse([
             'listId' => $recipeList->getId(),
             'name' => $recipeList->getName(),
-            'recipes' => array_map(fn($r) => ['id' => $r->getId(), 'name' => $r->getName()], $recipeList->getRecipes()->toArray())
+            'recipes' => array_map(fn($r) => [
+                                                'id' => $r->getId(),
+                                                'name' => $r->getName(),
+                                                'image'  => [
+                                                    'name' => $r->getImage()->getName(),
+                                                    'path'=>$r->getImage()->getPath()
+                                                ],
+                                            ],
+                                            $recipeList->getRecipes()->toArray()
+                                    )
         ], 200);
     }
 
@@ -161,7 +170,7 @@ final class RecipesListController extends AbstractController
      *
      * @param int $listId
      * @param int $recipeId
-     * @param RecipeListRepository $recipeListRepository
+     * @param RecipesListRepository $recipeListRepository
      * @param RecipesRepository $recipesRepository
      * @param EntityManagerInterface $entityManager
      * @return JsonResponse
@@ -170,7 +179,7 @@ final class RecipesListController extends AbstractController
     public function removeRecipeFromList(
         int $listId,
         int $recipeId,
-        RecipeListRepository $recipeListRepository,
+        RecipesListRepository $recipeListRepository,
         RecipesRepository $recipesRepository,
         EntityManagerInterface $entityManager
     ): JsonResponse {

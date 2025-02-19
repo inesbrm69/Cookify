@@ -23,9 +23,6 @@ const routes: Routes = [
   {
     path: 'explorer', component: ExploreComponent
   },
-  {
-    path: 'profil', component: ProfileComponent
-  },
 ];
 
 @NgModule({
