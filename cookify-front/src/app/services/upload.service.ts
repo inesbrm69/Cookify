@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class UploadService {
   private apiUrl = 'http://13.60.53.129/api/upload';
-
+  
   constructor(private http: HttpClient) {}
-
+  
   uploadImage(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('image', file);
 
-    return this.http.post<any>(this.apiUrl, formData);
+    return this.http.post<any>(this.apiUrl, formData, {withCredentials: true});
   }
 }
