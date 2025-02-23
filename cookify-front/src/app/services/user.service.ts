@@ -12,11 +12,11 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUser(): Observable<any>{
-    return this.http.get<any>(this.apiUrl+'user', { withCredentials: true });
+    return this.http.get<any>(this.apiUrl+'api/user', { withCredentials: true });
   }
   login(user: User): Observable<any> {
     return this.http.post<any>(
-      this.apiUrl+'login',
+      this.apiUrl+'api/login',
       user,
       { withCredentials: true }
     );
@@ -24,13 +24,13 @@ export class UserService {
 
   logout(): Observable<any> {
     return this.http.post<any>(
-      this.apiUrl+'logout',
+      this.apiUrl+'api/logout',
       {},
       { withCredentials: true }
     );
   }
 
   register(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl+'register', user, { withCredentials: true });
+    return this.http.post<User>(this.apiUrl+'api/register', user, { withCredentials: true });
   }
 }

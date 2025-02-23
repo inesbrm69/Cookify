@@ -18,7 +18,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'user_register', methods: ['POST'])]
+    #[Route('/api/register', name: 'user_register', methods: ['POST'])]
     public function register(
         Request $request,
         EntityManagerInterface $entityManager
@@ -35,7 +35,7 @@ final class UserController extends AbstractController
         return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
     }
 
-    #[Route('/login', name: 'user_login', methods: ['POST'])]
+    #[Route('/api/login', name: 'user_login', methods: ['POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();

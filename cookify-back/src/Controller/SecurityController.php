@@ -23,7 +23,7 @@ final class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'register', methods: ['POST'])]
+    #[Route('/api/register', name: 'register', methods: ['POST'])]
     public function register(
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
@@ -59,7 +59,7 @@ final class SecurityController extends AbstractController
         return new JsonResponse(['message' => 'User successfully registered'], Response::HTTP_CREATED);
     }
 
-    #[Route('/login', name: 'login', methods: ['POST'])]
+    #[Route('/api/login', name: 'login', methods: ['POST'])]
     public function login(
         Request $request,
         EntityManagerInterface $entityManager,
