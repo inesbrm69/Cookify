@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class QuantityFoodService {
-  private apiUrl = 'http://13.60.53.129:8000/';
+  private apiUrl = 'http://13.60.53.129/';
 
   constructor(private http: HttpClient) { }
 
