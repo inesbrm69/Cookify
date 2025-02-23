@@ -1,0 +1,98 @@
+[
+  {
+    "Id": 1,
+    "Email": "user1@example.com",
+    "Roles": ["User"],
+    "Name": "John",
+    "LastName": "Doe",
+    "UserName": "john_doe",
+    "Preferences": [
+      {
+        "Id": 1,
+        "Diet": "Vegan",
+        "Allergy": "Gluten",
+        "MealQuantity": 2
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "Email": "user2@example.com",
+    "Roles": ["Admin"],
+    "Name": "Jane",
+    "LastName": "Smith",
+    "UserName": "jane_smith",
+    "Preferences": [
+      {
+        "Id": 2,
+        "Diet": "Vegetarian",
+        "Allergy": "Dairy",
+        "MealQuantity": 3
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "Email": "user3@example.com",
+    "Roles": ["User"],
+    "Name": "Alice",
+    "LastName": "Johnson",
+    "UserName": "alice_johnson",
+    "Preferences": [
+      {
+        "Id": 3,
+        "Diet": "Low-Carb",
+        "Allergy": "Nuts",
+        "MealQuantity": 4
+      }
+    ]
+  },
+  {
+    "Id": 4,
+    "Email": "user4@example.com",
+    "Roles": ["User"],
+    "Name": "Bob",
+    "LastName": "Brown",
+    "UserName": "bob_brown",
+    "Preferences": [
+      {
+        "Id": 4,
+        "Diet": "Paleo",
+        "Allergy": "Eggs",
+        "MealQuantity": 5
+      }
+    ]
+  },
+  {
+    "Id": 5,
+    "Email": "user5@example.com",
+    "Roles": ["User"],
+    "Name": "Charlie",
+    "LastName": "Davis",
+    "UserName": "charlie_davis",
+    "Preferences": [
+      {
+        "Id": 5,
+        "Diet": "Keto",
+        "Allergy": "Soy",
+        "MealQuantity": 2
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "Email": "user6@example.com",
+    "Roles": ["Admin"],
+    "Name": "Diana",
+    "LastName": "Miller",
+    "UserName": "diana_miller",
+    "Preferences": [
+      {
+        "Id": 6,
+        "Diet": "Mediterranean",
+        "Allergy": "Shellfish",
+        "MealQuantity": 3
+      }
+    ]
+  }
+]

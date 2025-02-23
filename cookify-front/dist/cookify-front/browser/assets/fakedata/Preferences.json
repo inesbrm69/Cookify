@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "Diet": "Vegetarian",
+    "Allergy": "Nuts",
+    "MealQuantity": 3
+  },
+  {
+    "Id": 2,
+    "Diet": "Vegan",
+    "Allergy": "Gluten",
+    "MealQuantity": 2
+  },
+  {
+    "Id": 3,
+    "Diet": "Keto",
+    "Allergy": "Dairy",
+    "MealQuantity": 5
+  },
+  {
+    "Id": 4,
+    "Diet": "Paleo",
+    "Allergy": "Soy",
+    "MealQuantity": 4
+  },
+  {
+    "Id": 5,
+    "Diet": "Low-Carb",
+    "Allergy": "Eggs",
+    "MealQuantity": 6
+  },
+  {
+    "Id": 6,
+    "Diet": "Mediterranean",
+    "Allergy": "Shellfish",
+    "MealQuantity": 3
+  }
+]
