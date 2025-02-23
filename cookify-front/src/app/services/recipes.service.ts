@@ -8,7 +8,7 @@ import {Preferences} from "../interfaces/preferences";
   providedIn: 'root'
 })
 export class RecipesService {
-  private apiUrl = 'http://localhost:8000/';
+  private apiUrl = 'http://13.60.53.129:8000/';
 
   constructor(private http: HttpClient) { }
 

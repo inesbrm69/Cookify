@@ -7,7 +7,7 @@ import {User} from "../interfaces/user";
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8000/';
+  private apiUrl = 'http://13.60.53.129:8000/';
 
   constructor(private http: HttpClient) { }
 
