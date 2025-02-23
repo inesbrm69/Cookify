@@ -13,7 +13,7 @@ import {RecipeComponent} from "../recipe/recipe.component";
 export class ExploreComponent implements OnInit {
   isLoading: boolean = false;
   recipes: Recipes[] = [];
-  apiUrlPublic: string = "http://localhost:8000/uploads/images/";
+  apiUrlPublic: string = "http://13.60.53.129/uploads/images/";
   isRecipeListMode: boolean = false;
   private dialogRef? : null  |  MatDialogRef<ExploreComponent> = null;
   private  dialogData;

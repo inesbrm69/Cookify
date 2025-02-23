@@ -11,7 +11,7 @@ export class RecipeComponent {
 
   data = inject(MAT_DIALOG_DATA);
   recipe: Recipes;
-  apiUrlPublic: string = "http://localhost:8000/uploads/images/";
+  apiUrlPublic: string = "http://13.60.53.129/uploads/images/";
 
   constructor() {
     this.recipe = this.data.recipe;

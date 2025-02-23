@@ -17,7 +17,7 @@ import {ExploreComponent} from "../explore/explore.component";
 export class RecipeListComponent {
   recipes: Recipes[] = [];
   data = inject(MAT_DIALOG_DATA);
-  apiUrlPublic: string = "http://localhost:8000/uploads/images/";
+  apiUrlPublic: string = "http://13.60.53.129/uploads/images/";
   constructor(private recipesService: RecipesService, private router: Router) {
     this.recipesService.getRecipeList(this.data.idList).subscribe({
       next: (data) => {
